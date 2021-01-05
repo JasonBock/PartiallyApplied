@@ -12,6 +12,126 @@ namespace PartiallyApplied.Tests
 	public static class PartiallyAppliedInformationTests
 	{
 		[Test]
+		public static void CreateWhenTargetHasRefParameters()
+		{
+			var code =
+@"public static class Maths
+{
+	public static int AddByRef(int a, ref int b) => a + b;
+}
+
+public static class Runner
+{
+	public static void Run() => Partially.Apply(Maths.AddByRef, 3);
+}";
+			var information = PartiallyAppliedInformationTests.GetInformation(code);
+			Assert.Multiple(() =>
+			{
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Results.Length, Is.EqualTo(0));
+			});
+		}
+
+		[Test]
+		public static void CreateWhenTargetHasOutParameters()
+		{
+			var code =
+@"public static class Maths
+{
+	public static int AddByOut(int a, out int b) => a + b;
+}
+
+public static class Runner
+{
+	public static void Run() => Partially.Apply(Maths.AddByOut, 2);
+}";
+			var information = PartiallyAppliedInformationTests.GetInformation(code);
+			Assert.Multiple(() =>
+			{
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Results.Length, Is.EqualTo(0));
+			});
+		}
+
+		[Test]
+		public static void CreateWhenTargetHasInParameters()
+		{
+			var code =
+@"public static class Maths
+{
+	public static int AddByIn(int a, in int b) => a + b;
+}
+
+public static class Runner
+{
+	public static void Run() => Partially.Apply(Maths.AddByIn, 3);
+}";
+			var information = PartiallyAppliedInformationTests.GetInformation(code);
+			Assert.Multiple(() =>
+			{
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Results.Length, Is.EqualTo(0));
+			});
+		}
+
+		[Test]
+		public static void CreateWhenTargetHasRefStructParametersBeingPartiallyApplied()
+		{
+			var code =
+@"using System;
+
+public static class Maths
+{
+	public static int Contains(Span<int> a, int b) => a.Contains(b);
+}
+
+public static class Runner
+{
+	public static void Run()
+	{
+		var buffer = new Span<int>(new [] { 3 });
+		Partially.Apply(Maths.Contains, buffer);
+	}
+}";
+			var information = PartiallyAppliedInformationTests.GetInformation(code);
+			Assert.Multiple(() =>
+			{
+				Assert.That(information.Diagnostics.Any(_ => _.Id == CannotPartiallyApplyRefStructDiagnostics.Id), Is.True);
+				Assert.That(information.Results.Length, Is.EqualTo(0));
+			});
+		}
+
+		[Test]
+		public static void CreateWhenTargetHasRefStructParametersNotBeingPartiallyApplied()
+		{
+			var code =
+@"using System;
+
+public static class Maths
+{
+	public static int Contains(int a, Span<int> b) => b.Contains(a);
+}
+
+public static class Runner
+{
+	public static void Run()
+	{
+		var buffer = new Span<int>(new [] { 3 });
+		Partially.Apply(Maths.Contains, 3);
+	}
+}";
+			var information = PartiallyAppliedInformationTests.GetInformation(code);
+			Assert.Multiple(() =>
+			{
+				Assert.That(information.Diagnostics.Length, Is.EqualTo(0));
+				Assert.That(information.Results.Length, Is.EqualTo(1));
+				var result = information.Results[0];
+				Assert.That(result.Target.Name, Is.EqualTo("Contains"));
+				Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
+			});
+		}
+
+		[Test]
 		public static void CreateWhenApplyHasLessThan2Parameters()
 		{
 			var code = 

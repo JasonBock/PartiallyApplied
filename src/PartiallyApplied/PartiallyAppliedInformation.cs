@@ -55,7 +55,30 @@ namespace PartiallyApplied
 							}
 							else
 							{
-								results.Add(new(delegateSymbol, arguments.Count - 1));
+								var partialArgumentCount = arguments.Count - 1;
+								var addedDiagnostic = false;
+
+								for (var i = 0; i < delegateSymbol.Parameters.Length; i++)
+								{
+									var delegateParameter = delegateSymbol.Parameters[i];
+
+									if(delegateParameter.RefKind == RefKind.Ref || delegateParameter.RefKind == RefKind.Out ||
+										delegateParameter.RefKind == RefKind.In)
+									{
+										diagnostics.Add(UnsupportedParameterModifiersDiagnostics.Create(candidate));
+										addedDiagnostic = true;
+									}
+									else if(i < partialArgumentCount && delegateParameter.Type.IsRefLikeType)
+									{
+										diagnostics.Add(CannotPartiallyApplyRefStructDiagnostics.Create(candidate));
+										addedDiagnostic = true;
+									}
+								}
+
+								if(!addedDiagnostic)
+								{
+									results.Add(new(delegateSymbol, partialArgumentCount));
+								}
 							}
 						}
 					}
