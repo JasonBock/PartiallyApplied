@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using System.Linq;
 
 namespace PartiallyApplied.Extensions
 {
@@ -29,6 +30,7 @@ namespace PartiallyApplied.Extensions
 			return true;
 		}
 
+		// Can we build Apply() using Func or Action.
 		public static bool IsStandard(this IMethodSymbol self)
 		{
 			if (self.Parameters.Length > IMethodSymbolExtensions.MaximumParameterCount)
@@ -36,13 +38,9 @@ namespace PartiallyApplied.Extensions
 				return false;
 			}
 
-			foreach (var parameter in self.Parameters)
+			if(self.Parameters.Any(_ => _.Type.IsRefLikeType))
 			{
-				if (parameter.RefKind == RefKind.Ref || parameter.RefKind == RefKind.Out ||
-					parameter.RefKind == RefKind.In)
-				{
-					return false;
-				}
+				return false;
 			}
 
 			if (!self.ReturnsVoid && (self.ReturnsByRef || self.ReturnsByRefReadonly))

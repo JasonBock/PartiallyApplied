@@ -10,7 +10,36 @@ namespace PartiallyApplied.Tests
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
-		public static void GenerateWhenInvocationExists()
+		public static void x()
+		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"using System;
+
+namespace MockTests
+{
+	public static class Maths
+	{
+		public static int Add(int a, Span<int> b) => b.Contains(a);
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var incrementBy3 = Partially.Apply(Maths.Add, 3);
+		}
+	}
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Contain("public static partial class Partially"));
+			});
+		}
+
+		[Test]
+		public static void GenerateWhenInvocationDoesNotExist()
 		{
 			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
 @"namespace MockTests
@@ -37,9 +66,38 @@ namespace PartiallyApplied.Tests
 		}
 
 		[Test]
-		public static void GenerateWhenInvocationDoesNotExist()
+		public static void GenerateWhenInvocationExists()
 		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"using System;
 
+namespace MockTests
+{
+	public static class Maths
+	{
+		public static int Add(int a, int b) => a + b;
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var incrementBy3 = Partially.Apply(Maths.Add, 3);
+		}
+	}
+}
+
+public static partial class Partially
+{
+	public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
+		new((b) => method(a, b));
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Not.Contain("public static partial class Partially"));
+			});
 		}
 
 		[Test]

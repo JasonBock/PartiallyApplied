@@ -2,6 +2,8 @@
 using System.Collections.Immutable;
 using PartiallyApplied.Extensions;
 using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace PartiallyApplied
 {
@@ -15,6 +17,9 @@ namespace PartiallyApplied
 
 		public void Add(Type type) =>
 			this.builder.Add(type.Namespace);
+
+		public void AddRange(IEnumerable<INamespaceSymbol> namespaces) => 
+			this.builder.AddRange(namespaces.Select(_ => _.GetName()));
 
 		public ImmutableHashSet<string> Values => this.builder.ToImmutable();
 	}

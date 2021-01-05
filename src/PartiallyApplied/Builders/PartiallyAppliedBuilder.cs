@@ -31,8 +31,17 @@ namespace PartiallyApplied.Builders
 			writer.WriteLine("{");
 			writer.Indent++;
 
-			StandardDelegateBuilder.Build(this.information, writer, gatherer);
-			CustomDelegateBuilder.Build(this.information, writer, gatherer);
+			foreach (var result in this.information.Results.Distinct())
+			{
+				if (result.Target.IsStandard())
+				{
+					StandardDelegateBuilder.Build(result, writer, gatherer);
+				}
+				else
+				{
+					CustomDelegateBuilder.Build(result, writer, gatherer);
+				}
+			}
 
 			writer.Indent--;
 			writer.WriteLine("}");
