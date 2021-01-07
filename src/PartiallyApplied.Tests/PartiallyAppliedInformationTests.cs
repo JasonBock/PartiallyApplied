@@ -290,7 +290,7 @@ public static class Runner
 						access.Expression is IdentifierNameSyntax accessIdentifier &&
 						accessIdentifier.Identifier.Text == Naming.PartiallyClassName &&
 						access.Name is IdentifierNameSyntax accessName &&
-						accessName.Identifier.Text == Naming.PartiallyMethodName);
+						accessName.Identifier.Text == Naming.ApplyMethodName);
 			return new PartiallyAppliedInformation(new List<InvocationExpressionSyntax> { invocationSyntax }, compilation);
 		}
 	}

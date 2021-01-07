@@ -3,30 +3,24 @@ using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 using System.Threading.Tasks;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PartiallyApplied.Tests
 {
 	public static class PartiallyAppliedReceiverTests
 	{
-		[Test]
-		public static async Task FindCandidatesWhenInvocationIsPartiallyCreate()
+		private static IEnumerable<TestCaseData> GetMethodCalls()
 		{
-			var classDeclaration = (await SyntaxFactory.ParseSyntaxTree($"{Naming.PartiallyClassName}.{Naming.PartiallyMethodName}();")
-				.GetRootAsync().ConfigureAwait(false)).DescendantNodes(_ => true).OfType<InvocationExpressionSyntax>().First();
-
-			var receiver = new PartiallyAppliedReceiver();
-			receiver.OnVisitSyntaxNode(classDeclaration);
-
-			Assert.Multiple(() =>
-			{
-				Assert.That(receiver.Candidates.Count, Is.EqualTo(1));
-			});
+			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyMethodName}();", 1);
+			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyWithRefReturnMethodName}();", 1);
+			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyWithRefReadonlyReturnMethodName}();", 1);
+			yield return new("string.IsNullOrEmpty(\"a\");", 0);
 		}
 
-		[Test]
-		public static async Task FindCandidatesWhenInvocationIsNotPartiallyCreate()
+		[TestCaseSource(nameof(PartiallyAppliedReceiverTests.GetMethodCalls))]
+		public static async Task FindCandidate(string code, int expectedCount)
 		{
-			var classDeclaration = (await SyntaxFactory.ParseSyntaxTree("string.IsNullOrEmpty(\"a\");")
+			var classDeclaration = (await SyntaxFactory.ParseSyntaxTree(code)
 				.GetRootAsync().ConfigureAwait(false)).DescendantNodes(_ => true).OfType<InvocationExpressionSyntax>().First();
 
 			var receiver = new PartiallyAppliedReceiver();
@@ -34,7 +28,7 @@ namespace PartiallyApplied.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(receiver.Candidates.Count, Is.EqualTo(0));
+				Assert.That(receiver.Candidates.Count, Is.EqualTo(expectedCount));
 			});
 		}
 	}

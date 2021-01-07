@@ -77,7 +77,8 @@ namespace PartiallyApplied
 
 								if(!addedDiagnostic)
 								{
-									results.Add(new(delegateSymbol, partialArgumentCount));
+									var applyName = ((candidate.Expression as MemberAccessExpressionSyntax)!.Name as IdentifierNameSyntax)!.Identifier.Text;
+									results.Add(new(delegateSymbol, partialArgumentCount, applyName));
 								}
 							}
 						}

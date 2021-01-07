@@ -33,8 +33,9 @@ namespace PartiallyApplied.Builders
 			var targetDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Select(_ => _.GetName()))}>";
 			var applyDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Skip(result.PartialArgumentCount).Select(_ => _.GetName()))}>";
 			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
+			var applyName = result.ApplyName;
 
-			writer.WriteLine($"public static {applyDelegate} {Naming.PartiallyMethodName}({targetDelegate} method, {applyParameters}) =>");
+			writer.WriteLine($"public static {applyDelegate} {applyName}({targetDelegate} method, {applyParameters}) =>");
 			writer.Indent++;
 			var remainingParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount).Select(_ => _.Name));
 			var allParameters = string.Join(", ", target.Parameters.Select(_ => _.Name));

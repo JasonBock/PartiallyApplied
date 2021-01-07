@@ -9,7 +9,7 @@ namespace PartiallyApplied.IntegrationTests
 		public static int Sum(int a, int b, int c, int d) => a + b + c + d;
 	}
 
-	public static class ApplyTests
+	public static class StandardMethodTests
 	{
 		[Test]
 		public static void UseForAdd()

@@ -9,8 +9,8 @@ namespace PartiallyApplied
 	public sealed class PartiallyAppliedInformationResult 
 		: IEquatable<PartiallyAppliedInformationResult?>
 	{
-		public PartiallyAppliedInformationResult(IMethodSymbol target, int partialArgumentCount) =>
-			(this.Target, this.PartialArgumentCount) = (target, partialArgumentCount);
+		public PartiallyAppliedInformationResult(IMethodSymbol target, int partialArgumentCount, string applyName) =>
+			(this.Target, this.PartialArgumentCount, this.ApplyName) = (target, partialArgumentCount, applyName);
 
 		public static bool operator ==(PartiallyAppliedInformationResult left, PartiallyAppliedInformationResult right) => 
 			EqualityComparer<PartiallyAppliedInformationResult>.Default.Equals(left, right);
@@ -24,7 +24,8 @@ namespace PartiallyApplied
 		public bool Equals(PartiallyAppliedInformationResult? other) =>
 			other is not null &&
 				this.PartialArgumentCount == other.PartialArgumentCount &&
-				this.Target.AreEqual(other.Target);
+				this.Target.AreEqual(other.Target) &&
+				this.ApplyName == other.ApplyName;
 
 		public override int GetHashCode() =>
 			(this.GetTargetHashCode(), this.PartialArgumentCount).GetHashCode();
@@ -32,6 +33,7 @@ namespace PartiallyApplied
 		private int GetTargetHashCode() =>
 			$"{this.Target.ReturnType.Name}{this.Target.Parameters.Select(_ => _.Type.GetName())}".GetHashCode();
 
+		public string ApplyName { get; }
 		public int PartialArgumentCount { get; }
 		public IMethodSymbol Target { get; }
 	}

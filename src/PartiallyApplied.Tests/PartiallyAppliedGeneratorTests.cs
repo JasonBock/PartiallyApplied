@@ -7,26 +7,32 @@ using System.Linq;
 
 namespace PartiallyApplied.Tests
 {
+	// TODO: When calling Partially.Apply...(), consider using interpolated strings
+	// to ensure the name is correct.
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
-		public static void x()
+		public static void GenerateUsingApplyRefReturn()
 		{
 			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"using System;
-
-namespace MockTests
+@"namespace MockTests
 {
 	public static class Maths
 	{
-		public static int Add(int a, Span<int> b) => b.Contains(a);
+		private static int refReturn;
+
+		public static ref int Add(int a, int b)
+		{
+			Maths.refReturn = a + b + Maths.refReturn;
+			return ref Maths.refReturn;
+		}
 	}
 
 	public static class Test
 	{
 		public static void Generate()
 		{
-			var incrementBy3 = Partially.Apply(Maths.Add, 3);
+			var incrementBy3 = Partially.ApplyWithRefReturn(Maths.Add, 3);
 		}
 	}
 }");
@@ -35,6 +41,41 @@ namespace MockTests
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyWithRefReturnMethodName}("));
+			});
+		}
+
+		[Test]
+		public static void GenerateUsingApplyRefReadonlyReturn()
+		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"namespace MockTests
+{
+	public static class Maths
+	{
+		private static int refReturn;
+
+		public static ref readonly int Add(int a, int b)
+		{
+			Maths.refReturn = a + b + Maths.refReturn;
+			return ref Maths.refReturn;
+		}
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var incrementBy3 = Partially.ApplyWithRefReadonlyReturn(Maths.Add, 3);
+		}
+	}
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyWithRefReadonlyReturnMethodName}("));
 			});
 		}
 
@@ -62,6 +103,7 @@ namespace MockTests
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}("));
 			});
 		}
 
@@ -97,6 +139,7 @@ public static partial class Partially
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Not.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Not.Contain($"{Naming.ApplyMethodName}("));
 			});
 		}
 
@@ -126,6 +169,7 @@ public static partial class Partially
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}("));
 			});
 		}
 

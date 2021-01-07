@@ -9,7 +9,9 @@ namespace PartiallyApplied.Extensions
 
 		public static bool AreEqual(this IMethodSymbol self, IMethodSymbol other)
 		{
-			if (!self.ReturnType.Equals(other.ReturnType))
+			if ((self.ReturnsVoid && !other.ReturnsVoid) ||
+				(!self.ReturnsVoid && other.ReturnsVoid) ||
+				(!self.ReturnsVoid && !other.ReturnsVoid && !self.ReturnType.Equals(other.ReturnType)))
 			{
 				return false;
 			}
