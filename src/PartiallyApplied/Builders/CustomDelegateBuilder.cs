@@ -26,7 +26,11 @@ namespace PartiallyApplied.Builders
 			var applyDelegateName = $"Apply_{id}_Delegate";
 			var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
 			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
-			var applyName = result.ApplyName;
+			var applyOpenGenericNames = target.GetOpenGenericNames();
+			var applyOpenGenerics = applyOpenGenericNames.Length > 0 ?
+				$"<{string.Join(", ", applyOpenGenericNames)}>" : string.Empty;
+			var applyName = $"{result.ApplyName}{applyOpenGenerics}";
+
 			var refReturn = target.ReturnsByRef ? "ref " :
 				target.ReturnsByRefReadonly ? "ref readonly " : string.Empty;
 			var methodRefReturn = target.ReturnsByRef || target.ReturnsByRefReadonly ? "ref " : string.Empty;
