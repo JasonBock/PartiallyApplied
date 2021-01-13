@@ -13,10 +13,9 @@ namespace PartiallyApplied
 				invocation.Expression is MemberAccessExpressionSyntax access &&
 				access.Expression is IdentifierNameSyntax accessIdentifier &&
 				accessIdentifier.Identifier.Text == Naming.PartiallyClassName &&
-				access.Name is IdentifierNameSyntax accessName &&
-					(accessName.Identifier.Text == Naming.ApplyMethodName ||
-					accessName.Identifier.Text == Naming.ApplyWithRefReturnMethodName ||
-					accessName.Identifier.Text == Naming.ApplyWithRefReadonlyReturnMethodName))
+					(access.Name.Identifier.Text == Naming.ApplyMethodName ||
+					access.Name.Identifier.Text == Naming.ApplyWithRefReturnMethodName ||
+					access.Name.Identifier.Text == Naming.ApplyWithRefReadonlyReturnMethodName))
 			{
 				this.Candidates.Add(invocation);
 			}

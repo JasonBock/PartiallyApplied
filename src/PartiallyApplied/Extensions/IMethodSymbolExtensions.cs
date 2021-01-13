@@ -1,5 +1,4 @@
 ﻿using Microsoft.CodeAnalysis;
-using System.Collections.Immutable;
 using System.Linq;
 
 namespace PartiallyApplied.Extensions
@@ -24,31 +23,13 @@ namespace PartiallyApplied.Extensions
 
 			for (var i = 0; i < self.Parameters.Length; i++)
 			{
-				if (!self.Parameters[i].Type.Equals(self.Parameters[i].Type))
+				if (!self.Parameters[i].Type.Equals(other.Parameters[i].Type))
 				{
 					return false;
 				}
 			}
 
 			return true;
-		}
-
-		public static ImmutableArray<string> GetOpenGenericNames(this IMethodSymbol self)
-		{
-			var names = ImmutableArray.CreateBuilder<string>();
-
-			if(self.TypeParameters.Length > 0)
-			{
-				for (var i = 0; i < self.TypeArguments.Length; i++)
-				{
-					if (self.TypeArguments[i].Equals(self.TypeParameters[i]))
-					{
-						names.Add(self.TypeParameters[i].Name);
-					}
-				}
-			}
-
-			return names.ToImmutable();
 		}
 
 		// Can we build Apply() using Func or Action.

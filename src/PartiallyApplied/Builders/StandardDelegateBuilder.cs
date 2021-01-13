@@ -33,9 +33,8 @@ namespace PartiallyApplied.Builders
 			var targetDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Select(_ => _.GetName()))}>";
 			var applyDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Skip(result.PartialArgumentCount).Select(_ => _.GetName()))}>";
 			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
-			var applyOpenGenericNames = target.GetOpenGenericNames();
-			var applyOpenGenerics = applyOpenGenericNames.Length > 0 ?
-				$"<{string.Join(", ", applyOpenGenericNames)}>" : string.Empty;
+			var applyOpenGenerics = target.TypeParameters.Length > 0 ?
+				$"<{string.Join(", ", target.TypeParameters.Select(_ => _.Name))}>" : string.Empty;
 			var applyName = $"{result.ApplyName}{applyOpenGenerics}";
 
 			writer.WriteLine($"public static {applyDelegate} {applyName}({targetDelegate} method, {applyParameters}) =>");

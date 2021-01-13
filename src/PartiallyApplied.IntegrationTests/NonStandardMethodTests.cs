@@ -7,12 +7,25 @@ namespace PartiallyApplied.IntegrationTests
 	{
 		private static int refReadonly;
 		private static int refRefurn;
+		private static string refGeneric = string.Empty;
 
 		public static int Sum(int a, int b, int c, int d, int e, int f, int g, int h,
 			int i, int j, int k, int l, int m, int n, int o, int p, int q) =>
 			a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q;
 
 		public static bool Contains(int value, Span<int> buffer) => buffer.Contains(value);
+
+		public static ref string RefReturnBegin<T>(T a, double b)
+		{
+			NonStandardMethods.refGeneric = $"{a}, {b}";
+			return ref NonStandardMethods.refGeneric;
+		}
+
+		public static ref string RefReturnEnd<T>(int a, T b)
+		{
+			NonStandardMethods.refGeneric = $"{a}, {b}";
+			return ref NonStandardMethods.refGeneric;
+		}
 
 		public static ref int RefReturn(int a, int b)
 		{
@@ -29,6 +42,20 @@ namespace PartiallyApplied.IntegrationTests
 
 	public static class NonStandardMethodTests
 	{
+		[Test]
+		public static void ApplyForGenericEnd()
+		{
+			var combine3AtEndWithString = Partially.Apply<string>(NonStandardMethods.RefReturnEnd<string>, 3);
+			Assert.That(combine3AtEndWithString("c"), Is.EqualTo("3, c"));
+		}
+
+		[Test]
+		public static void ApplyForGenericBegin()
+		{
+			var combine3AtBeginWithInt = Partially.Apply<int>(NonStandardMethods.RefReturnBegin<int>, 3);
+			Assert.That(combine3AtBeginWithInt(4), Is.EqualTo("3, 4"));
+		}
+
 		[Test]
 		public static void ApplyWithLotsOfParameters()
 		{

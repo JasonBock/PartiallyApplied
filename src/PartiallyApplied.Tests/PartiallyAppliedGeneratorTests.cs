@@ -12,6 +12,94 @@ namespace PartiallyApplied.Tests
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
+		public static void x()
+		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"using System;
+
+namespace MockTests
+{
+	public static class Maths
+	{
+		public static string CombineEnd<T>(int a, int b, T c) => string.Empty;
+		public static string CombineBegin<T>(T a, double b, int c) => string.Empty;
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var combine3AtEndWithString = Partially.Apply<string>(Maths.CombineEnd, 3);
+			var combine3AtBeginWithInt = Partially.Apply(Maths.CombineBegin, 3);
+		}
+	}
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
+			});
+		}
+
+		[Test]
+		public static void GenerateWhenGenericsExistForStandardMethod()
+		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"namespace MockTests
+{
+	public static class Maths
+	{
+		public static void Combine<T>(int a, T b) { } 
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var combineWith3 = Partially.Apply(Maths.Combine, 3);
+		}
+	}
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
+			});
+		}
+
+		[Test]
+		public static void GenerateWhenGenericsExistForNonStandardMethod()
+		{
+			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+@"namespace MockTests
+{
+	public static class Maths
+	{
+		public static void Contains<T>(int value, Span<int> buffer, T value) { }
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var combineWith3 = Partially.Apply(Maths.Contains, 3);
+		}
+	}
+}");
+
+			Assert.Multiple(() =>
+			{
+				Assert.That(diagnostics.Length, Is.EqualTo(0));
+				Assert.That(output, Does.Contain("public static partial class Partially"));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
+			});
+		}
+
+		[Test]
 		public static void GenerateUsingApplyRefReturn()
 		{
 			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
