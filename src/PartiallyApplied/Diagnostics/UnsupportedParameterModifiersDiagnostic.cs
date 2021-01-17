@@ -2,14 +2,14 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class UnsupportedParameterModifiersDiagnostics
+	public static class UnsupportedParameterModifiersDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
-			Diagnostic.Create(new(UnsupportedParameterModifiersDiagnostics.Id, UnsupportedParameterModifiersDiagnostics.Title,
-				UnsupportedParameterModifiersDiagnostics.Message,
+			Diagnostic.Create(new(UnsupportedParameterModifiersDiagnostic.Id, UnsupportedParameterModifiersDiagnostic.Title,
+				UnsupportedParameterModifiersDiagnostic.Message,
 				DiagnosticConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					UnsupportedParameterModifiersDiagnostics.Id, UnsupportedParameterModifiersDiagnostics.Title)),
+					UnsupportedParameterModifiersDiagnostic.Id, UnsupportedParameterModifiersDiagnostic.Title)),
 				node.GetLocation());
 
 		public const string Id = "PA6";

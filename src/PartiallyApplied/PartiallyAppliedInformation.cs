@@ -30,7 +30,7 @@ namespace PartiallyApplied
 
 				if (candidate.ArgumentList.Arguments.Count < 2)
 				{
-					diagnostics.Add(IncorrectApplyArgumentCountDiagnostics.Create(candidate));
+					diagnostics.Add(IncorrectApplyArgumentCountDiagnostic.Create(candidate));
 				}
 				else
 				{
@@ -40,19 +40,19 @@ namespace PartiallyApplied
 
 					if (delegateSymbol is null)
 					{
-						diagnostics.Add(NoTargetMethodFoundDiagnostics.Create(delegateArgument));
+						diagnostics.Add(NoTargetMethodFoundDiagnostic.Create(delegateArgument));
 					}
 					else if (!wasFound)
 					{
 						if (delegateSymbol.Parameters.Length < 2)
 						{
-							diagnostics.Add(MinimalParameterCountNotMetDiagnostics.Create(delegateArgument));
+							diagnostics.Add(MinimalParameterCountNotMetDiagnostic.Create(delegateArgument));
 						}
 						else
 						{
 							if (arguments.Count > delegateSymbol.Parameters.Length)
 							{
-								diagnostics.Add(TooManyArgumentsDiagnostics.Create(candidate));
+								diagnostics.Add(TooManyArgumentsDiagnostic.Create(candidate));
 							}
 							else
 							{
@@ -61,12 +61,12 @@ namespace PartiallyApplied
 								if (delegateSymbol.Parameters.Any(_ => _.RefKind == RefKind.Ref ||
 									_.RefKind == RefKind.Out || _.RefKind == RefKind.In))
 								{
-									diagnostics.Add(UnsupportedParameterModifiersDiagnostics.Create(candidate));
+									diagnostics.Add(UnsupportedParameterModifiersDiagnostic.Create(candidate));
 								}
 
 								if (delegateSymbol.Parameters.Take(partialArgumentCount).Any(_ => _.Type.IsRefLikeType))
 								{
-									diagnostics.Add(CannotPartiallyApplyRefStructDiagnostics.Create(candidate));
+									diagnostics.Add(CannotPartiallyApplyRefStructDiagnostic.Create(candidate));
 								}
 
 								if (diagnostics.Count == 0)

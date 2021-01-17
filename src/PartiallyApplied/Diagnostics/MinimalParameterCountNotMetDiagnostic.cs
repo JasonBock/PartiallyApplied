@@ -2,14 +2,14 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class MinimalParameterCountNotMetDiagnostics
+	public static class MinimalParameterCountNotMetDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
-			Diagnostic.Create(new(MinimalParameterCountNotMetDiagnostics.Id, MinimalParameterCountNotMetDiagnostics.Title,
-				MinimalParameterCountNotMetDiagnostics.Message,
+			Diagnostic.Create(new(MinimalParameterCountNotMetDiagnostic.Id, MinimalParameterCountNotMetDiagnostic.Title,
+				MinimalParameterCountNotMetDiagnostic.Message,
 				DiagnosticConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					MinimalParameterCountNotMetDiagnostics.Id, MinimalParameterCountNotMetDiagnostics.Title)),
+					MinimalParameterCountNotMetDiagnostic.Id, MinimalParameterCountNotMetDiagnostic.Title)),
 				node.GetLocation());
 
 		public const string Id = "PA4";

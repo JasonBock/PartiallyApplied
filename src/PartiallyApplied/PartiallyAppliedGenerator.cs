@@ -25,7 +25,7 @@ namespace PartiallyApplied
 			}
 			catch (Exception e)
 			{
-				context.ReportDiagnostic(UnexpectedExceptionDiagnostics.Create(e));
+				context.ReportDiagnostic(UnexpectedExceptionDiagnostic.Create(e));
 			}
 		}
 

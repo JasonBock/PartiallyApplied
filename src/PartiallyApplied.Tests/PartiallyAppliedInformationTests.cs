@@ -27,7 +27,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -48,7 +48,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -69,7 +69,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -96,7 +96,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == CannotPartiallyApplyRefStructDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == CannotPartiallyApplyRefStructDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -147,7 +147,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == IncorrectApplyArgumentCountDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == IncorrectApplyArgumentCountDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -168,7 +168,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == NoTargetMethodFoundDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == NoTargetMethodFoundDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -189,7 +189,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == MinimalParameterCountNotMetDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == MinimalParameterCountNotMetDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}
@@ -210,7 +210,7 @@ public static class Runner
 			var information = PartiallyAppliedInformationTests.GetInformation(code);
 			Assert.Multiple(() =>
 			{
-				Assert.That(information.Diagnostics.Any(_ => _.Id == TooManyArgumentsDiagnostics.Id), Is.True);
+				Assert.That(information.Diagnostics.Any(_ => _.Id == TooManyArgumentsDiagnostic.Id), Is.True);
 				Assert.That(information.Results.Length, Is.EqualTo(0));
 			});
 		}

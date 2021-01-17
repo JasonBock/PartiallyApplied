@@ -2,14 +2,14 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class CannotPartiallyApplyRefStructDiagnostics
+	public static class CannotPartiallyApplyRefStructDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
-			Diagnostic.Create(new(CannotPartiallyApplyRefStructDiagnostics.Id, CannotPartiallyApplyRefStructDiagnostics.Title,
-				CannotPartiallyApplyRefStructDiagnostics.Message,
+			Diagnostic.Create(new(CannotPartiallyApplyRefStructDiagnostic.Id, CannotPartiallyApplyRefStructDiagnostic.Title,
+				CannotPartiallyApplyRefStructDiagnostic.Message,
 				DiagnosticConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					CannotPartiallyApplyRefStructDiagnostics.Id, CannotPartiallyApplyRefStructDiagnostics.Title)),
+					CannotPartiallyApplyRefStructDiagnostic.Id, CannotPartiallyApplyRefStructDiagnostic.Title)),
 				node.GetLocation());
 
 		public const string Id = "PA7";

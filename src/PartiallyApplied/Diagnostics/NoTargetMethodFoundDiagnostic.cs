@@ -2,14 +2,14 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class NoTargetMethodFoundDiagnostics
+	public static class NoTargetMethodFoundDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
-			Diagnostic.Create(new(NoTargetMethodFoundDiagnostics.Id, NoTargetMethodFoundDiagnostics.Title,
-				NoTargetMethodFoundDiagnostics.Message,
+			Diagnostic.Create(new(NoTargetMethodFoundDiagnostic.Id, NoTargetMethodFoundDiagnostic.Title,
+				NoTargetMethodFoundDiagnostic.Message,
 				DiagnosticConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					IncorrectApplyArgumentCountDiagnostics.Id, IncorrectApplyArgumentCountDiagnostics.Title)),
+					IncorrectApplyArgumentCountDiagnostic.Id, IncorrectApplyArgumentCountDiagnostic.Title)),
 				node.GetLocation());
 
 		public const string Id = "PA3";

@@ -2,14 +2,14 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class TooManyArgumentsDiagnostics
+	public static class TooManyArgumentsDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
-			Diagnostic.Create(new(TooManyArgumentsDiagnostics.Id, TooManyArgumentsDiagnostics.Title,
-				TooManyArgumentsDiagnostics.Message,
+			Diagnostic.Create(new(TooManyArgumentsDiagnostic.Id, TooManyArgumentsDiagnostic.Title,
+				TooManyArgumentsDiagnostic.Message,
 				DiagnosticConstants.Usage, DiagnosticSeverity.Error, true,
 				helpLinkUri: HelpUrlBuilder.Build(
-					TooManyArgumentsDiagnostics.Id, TooManyArgumentsDiagnostics.Title)),
+					TooManyArgumentsDiagnostic.Id, TooManyArgumentsDiagnostic.Title)),
 				node.GetLocation());
 
 		public const string Id = "PA5";
