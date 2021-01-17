@@ -66,10 +66,35 @@ There are a couple of cases where PartiallyApplied will create custom delegates 
 * If the method has a `ref` or `ret return` return values
 * If the method has a `ref struct` type for a parameter that is **not** used in partial application.
 * If the method has any default values for a parameter
-For example, if you use PartiallyApplied to create a PAF for 
+For example, if you use PartiallyApplied to create a PAF for a method with default values for parameters:
+```
+public static class Maths
+{
+  public static int AddOptionals(int a = 3, int b = 4, int c = 5) => a + b + c;
+}
+```
+You'd write this:
+```
+var addWith3 = Partially.ApplyWithOptionals(Maths.AddOptionals, 3);
+Console.Out.WriteLine(addWith3());
+Console.Out.WriteLine(addWith3(10));
+Console.Out.WriteLine(addWith3(10, 20));
+```
+Note that the name is `ApplyWithOptionals`. The appended `WithOptionals` is arbitrary in that PartiallyApplied will generate the method with the given name, but this is used to differentiate the generated method with any other "standard" `Apply()` methods that might be generated. If you were to use PartiallyApplied to do a PAF for this **one** method, you could simply use `Apply` as the name, but for these special cases, it's best to be "safe" and use a distinct `Apply` name.
 
-TODO: Finish
+Here's what the generated code looks like:
+```
+using System;
 
+#nullable enable
+public static partial class Partially
+{
+  public delegate int Target_2_Delegate(int a = 3, int b = 4, int c = 5);
+  public delegate int Apply_2_Delegate(int b = 4, int c = 5);
+  public static Apply_2_Delegate ApplyWithOptionals(Target_2_Delegate method, int a) =>
+    new((b, c) => method(a, b, c));
+}
+```
 # Conclusion
 
 You've now seen how PartiallyApplied works. Remember to peruse the tests within `PartiallyApplied.IntegrationTests` in case you get stuck. If you'd like, feel free to submit a PR to update this document to improve its contents. If you run into any issues, please submit an issue. Happy coding!
