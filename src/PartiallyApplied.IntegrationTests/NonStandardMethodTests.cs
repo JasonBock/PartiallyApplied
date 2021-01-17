@@ -9,6 +9,8 @@ namespace PartiallyApplied.IntegrationTests
 		private static int refRefurn;
 		private static string refGeneric = string.Empty;
 
+		public static int AddOptionals(int a = 3, int b = 4, int c = 5) => a + b + c;
+
 		public static int Sum(int a, int b, int c, int d, int e, int f, int g, int h,
 			int i, int j, int k, int l, int m, int n, int o, int p, int q) =>
 			a + b + c + d + e + f + g + h + i + j + k + l + m + n + o + p + q;
@@ -42,6 +44,18 @@ namespace PartiallyApplied.IntegrationTests
 
 	public static class NonStandardMethodTests
 	{
+		[Test]
+		public static void ApplyForOptionals()
+		{
+			var addWith3 = Partially.ApplyWithOptionals(NonStandardMethods.AddOptionals, 3);
+			Assert.Multiple(() =>
+			{
+				Assert.That(addWith3(), Is.EqualTo(12));
+				Assert.That(addWith3(10), Is.EqualTo(18));
+				Assert.That(addWith3(10, 20), Is.EqualTo(33));
+			});
+		}
+
 		[Test]
 		public static void ApplyForGenericEnd()
 		{

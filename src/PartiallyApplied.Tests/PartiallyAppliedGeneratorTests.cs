@@ -21,16 +21,14 @@ namespace MockTests
 {
 	public static class Maths
 	{
-		public static string CombineEnd<T>(int a, int b, T c) => string.Empty;
-		public static string CombineBegin<T>(T a, double b, int c) => string.Empty;
+		public static int Add(int a = 2, int b = 3) => a + b;
 	}
 
 	public static class Test
 	{
 		public static void Generate()
 		{
-			var combine3AtEndWithString = Partially.Apply<string>(Maths.CombineEnd, 3);
-			var combine3AtBeginWithInt = Partially.Apply(Maths.CombineBegin, 3);
+			var incrementBy5 = Partially.ApplyWithOptionals(Maths.Add, 3);
 		}
 	}
 }");
@@ -39,7 +37,7 @@ namespace MockTests
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
+				Assert.That(output, Does.Contain($"{Naming.ApplyWithOptionalsName}("));
 			});
 		}
 

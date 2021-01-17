@@ -22,10 +22,13 @@ namespace PartiallyApplied.Builders
 
 			var id = Interlocked.Increment(ref CustomDelegateBuilder.id);
 			var targetDelegateName = $"Target_{id}_Delegate";
-			var targetDelegateParameters = string.Join(", ", target.Parameters.Select(_ => $"{_.Type.GetName()} {_.Name}"));
+			var targetDelegateParameters = string.Join(", ", 
+				target.Parameters.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
 			var applyDelegateName = $"Apply_{id}_Delegate";
-			var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
-			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
+			var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount)
+				.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
+			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount)
+				.Select(_ => $"{_.Type.GetName()} {_.Name}"));
 			var applyOpenGenerics = target.TypeParameters.Length > 0 ?
 				$"<{string.Join(", ", target.TypeParameters.Select(_ => _.Name))}>" : string.Empty;
 			var applyName = $"{result.ApplyName}{applyOpenGenerics}";

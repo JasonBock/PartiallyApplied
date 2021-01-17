@@ -40,7 +40,7 @@ namespace PartiallyApplied.Extensions
 				return false;
 			}
 
-			if(self.Parameters.Any(_ => _.Type.IsRefLikeType))
+			if (self.Parameters.Any(_ => _.Type.IsRefLikeType || _.HasExplicitDefaultValue))
 			{
 				return false;
 			}
