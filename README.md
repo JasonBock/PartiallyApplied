@@ -16,8 +16,8 @@ public static class Runner
   public static void Run()
   {
     var incrementBy3 = Partially.Apply(Maths.Add, 3);
-	var value = incrementBy3(4);
-	// value is now equal to 7.
+    var value = incrementBy3(4);
+    // value is now equal to 7.
   }
 }
 ```
