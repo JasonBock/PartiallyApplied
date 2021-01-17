@@ -12,8 +12,7 @@ namespace PartiallyApplied.Tests
 		private static IEnumerable<TestCaseData> GetMethodCalls()
 		{
 			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyMethodName}();", 1);
-			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyWithRefReturnMethodName}();", 1);
-			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyWithRefReadonlyReturnMethodName}();", 1);
+			yield return new($"{Naming.PartiallyClassName}.{Naming.ApplyMethodName}WithSpecialText();", 1);
 			yield return new("string.IsNullOrEmpty(\"a\");", 0);
 		}
 

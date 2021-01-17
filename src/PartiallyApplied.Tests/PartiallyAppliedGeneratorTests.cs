@@ -12,36 +12,6 @@ namespace PartiallyApplied.Tests
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
-		public static void x()
-		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"using System;
-
-namespace MockTests
-{
-	public static class Maths
-	{
-		public static int Add(int a = 2, int b = 3) => a + b;
-	}
-
-	public static class Test
-	{
-		public static void Generate()
-		{
-			var incrementBy5 = Partially.ApplyWithOptionals(Maths.Add, 3);
-		}
-	}
-}");
-
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyWithOptionalsName}("));
-			});
-		}
-
-		[Test]
 		public static void GenerateWhenGenericsExistForStandardMethod()
 		{
 			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
@@ -127,7 +97,7 @@ namespace MockTests
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyWithRefReturnMethodName}("));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}WithRefReturn("));
 			});
 		}
 
@@ -161,7 +131,7 @@ namespace MockTests
 			{
 				Assert.That(diagnostics.Length, Is.EqualTo(0));
 				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyWithRefReadonlyReturnMethodName}("));
+				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}WithRefReadonlyReturn("));
 			});
 		}
 

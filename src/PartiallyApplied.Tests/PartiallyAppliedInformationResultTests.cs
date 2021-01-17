@@ -74,7 +74,7 @@ namespace PartiallyApplied.Tests
 			var symbol = PartiallyAppliedInformationResultTests.GetMethodSymbol(
 				$"public class Target {{ public void {methodName}() {{ }} }}", methodName);
 			var resultA = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyMethodName);
-			var resultB = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyWithRefReturnMethodName);
+			var resultB = new PartiallyAppliedInformationResult(symbol, 2, $"{Naming.ApplyMethodName}WithRefReturn");
 			var resultC = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyMethodName);
 
 			Assert.Multiple(() =>
