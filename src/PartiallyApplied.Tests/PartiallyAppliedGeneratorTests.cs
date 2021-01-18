@@ -7,8 +7,6 @@ using System.Linq;
 
 namespace PartiallyApplied.Tests
 {
-	// TODO: When calling Partially.Apply...(), consider using interpolated strings
-	// to ensure the name is correct.
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
