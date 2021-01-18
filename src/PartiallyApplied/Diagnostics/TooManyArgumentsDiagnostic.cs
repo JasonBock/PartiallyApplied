@@ -2,7 +2,7 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class TooManyArgumentsDiagnostic
+	internal static class TooManyArgumentsDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
 			Diagnostic.Create(new(TooManyArgumentsDiagnostic.Id, TooManyArgumentsDiagnostic.Title,
@@ -12,8 +12,8 @@ namespace PartiallyApplied.Diagnostics
 					TooManyArgumentsDiagnostic.Id, TooManyArgumentsDiagnostic.Title)),
 				node.GetLocation());
 
-		public const string Id = "PA5";
-		public const string Message = "Too many arguments are being passed to the target method";
-		public const string Title = "Too Many Arguments";
+		internal const string Id = "PA5";
+		internal const string Message = "Too many arguments are being passed to the target method";
+		internal const string Title = "Too Many Arguments";
 	}
 }

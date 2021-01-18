@@ -2,7 +2,7 @@
 
 namespace PartiallyApplied.Diagnostics
 {
-	public static class IncorrectApplyArgumentCountDiagnostic
+	internal static class IncorrectApplyArgumentCountDiagnostic
 	{
 		internal static Diagnostic Create(SyntaxNode node) =>
 			Diagnostic.Create(new(IncorrectApplyArgumentCountDiagnostic.Id, IncorrectApplyArgumentCountDiagnostic.Title,
@@ -12,8 +12,8 @@ namespace PartiallyApplied.Diagnostics
 					IncorrectApplyArgumentCountDiagnostic.Id, IncorrectApplyArgumentCountDiagnostic.Title)),
 				node.GetLocation());
 
-		public const string Id = "PA2";
-		public const string Message = "The Apply() method needs the target method and at least one parameter to partially apply";
-		public const string Title = "Incorrect Apply Argument Count";
+		internal const string Id = "PA2";
+		internal const string Message = "The Apply() method needs the target method and at least one parameter to partially apply";
+		internal const string Title = "Incorrect Apply Argument Count";
 	}
 }

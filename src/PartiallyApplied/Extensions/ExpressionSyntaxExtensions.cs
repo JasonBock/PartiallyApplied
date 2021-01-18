@@ -3,9 +3,9 @@ using Microsoft.CodeAnalysis;
 
 namespace PartiallyApplied.Extensions
 {
-	public static class ExpressionSyntaxExtensions
+	internal static class ExpressionSyntaxExtensions
 	{
-		public static (IMethodSymbol?, bool) TryGetMethodSymbol(this ExpressionSyntax self, SemanticModel model)
+		internal static (IMethodSymbol?, bool) TryGetMethodSymbol(this ExpressionSyntax self, SemanticModel model)
 		{
 			var symbol = model.GetSymbolInfo(self);
 
