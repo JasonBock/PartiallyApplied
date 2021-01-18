@@ -1,7 +1,7 @@
 <Project>
   <PropertyGroup>
     <Authors>Jason Bock</Authors>
-    <Copyright>Copyright © 2020</Copyright>
+    <Copyright>Copyright © 2021</Copyright>
     <LangVersion>9.0</LangVersion>
     <Nullable>enable</Nullable>
     <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
