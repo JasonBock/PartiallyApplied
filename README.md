@@ -21,4 +21,4 @@ public static class Runner
   }
 }
 ```
-More details can be found on the [Quickstart page](https://github.com/JasonBock/PartiallyApplied/blob/master/docs/Quickstart.md).
+More details can be found on the [Quickstart page](https://github.com/JasonBock/PartiallyApplied/blob/main/docs/Quickstart.md).
