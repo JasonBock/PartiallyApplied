@@ -59,6 +59,21 @@ var triple = Partially.Apply(Maths.Multiply, 3);
 ```
 PartiallyApplied would use the same `Apply()` method that was generated for `Maths.Add`.
 
+Note that PartiallyApplied will work with static or instance methods. So this works just fine:
+
+```
+public class Functions
+{
+  public int Multiply(int a, int b) => a * b;
+}
+
+var functions = new Functions();
+var triple = Partially.Apply(functions.Multiply, 3);
+Console.Out.WriteLine(triple(4));
+```
+
+This should print `12` to the console window.
+
 ### Special Cases
 
 There are a couple of cases where PartiallyApplied will create custom delegates to support the targeted method. These cases are:
