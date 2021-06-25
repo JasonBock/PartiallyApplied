@@ -7,6 +7,7 @@ using System.Linq;
 
 namespace PartiallyApplied.Tests
 {
+#pragma warning disable NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
 	public static class PartiallyAppliedInformationResultTests
 	{
 		[Test]
@@ -43,9 +44,20 @@ namespace PartiallyApplied.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA == resultB");
+				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
+				Assert.That(resultA == resultB, Is.False, "resultA == resultB");
+				Assert.That(resultA != resultB, Is.True, "resultA != resultB");
+				Assert.That(resultA.GetHashCode(), Is.Not.EqualTo(resultB.GetHashCode()), "resultA.GetHashCode() == resultB.GetHashCode()");
+
 				Assert.That(resultA, Is.EqualTo(resultC), "resultA != resultC");
+				Assert.That(resultA == resultC, Is.True, "resultA == resultC");
+				Assert.That(resultA != resultC, Is.False, "resultA != resultC");
+				Assert.That(resultA.GetHashCode(), Is.EqualTo(resultC.GetHashCode()), "resultA.GetHashCode() == resultC.GetHashCode()");
+
 				Assert.That(resultB, Is.Not.EqualTo(resultC), "resultB == resultC");
+				Assert.That(resultB == resultC, Is.False, "resultB == resultC");
+				Assert.That(resultB != resultC, Is.True, "resultB != resultC");
+				Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
 			});
 		}
 
@@ -61,9 +73,20 @@ namespace PartiallyApplied.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA == resultB");
+				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
+				Assert.That(resultA == resultB, Is.False, "resultA == resultB");
+				Assert.That(resultA != resultB, Is.True, "resultA != resultB");
+				Assert.That(resultA.GetHashCode(), Is.Not.EqualTo(resultB.GetHashCode()), "resultA.GetHashCode() == resultB.GetHashCode()");
+
 				Assert.That(resultA, Is.EqualTo(resultC), "resultA != resultC");
+				Assert.That(resultA == resultC, Is.True, "resultA == resultC");
+				Assert.That(resultA != resultC, Is.False, "resultA != resultC");
+				Assert.That(resultA.GetHashCode(), Is.EqualTo(resultC.GetHashCode()), "resultA.GetHashCode() == resultC.GetHashCode()");
+
 				Assert.That(resultB, Is.Not.EqualTo(resultC), "resultB == resultC");
+				Assert.That(resultB == resultC, Is.False, "resultB == resultC");
+				Assert.That(resultB != resultC, Is.True, "resultB != resultC");
+				Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
 			});
 		}
 
@@ -79,9 +102,20 @@ namespace PartiallyApplied.Tests
 
 			Assert.Multiple(() =>
 			{
-				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA == resultB");
+				Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
+				Assert.That(resultA == resultB, Is.False, "resultA == resultB");
+				Assert.That(resultA != resultB, Is.True, "resultA != resultB");
+				Assert.That(resultA.GetHashCode(), Is.Not.EqualTo(resultB.GetHashCode()), "resultA.GetHashCode() == resultB.GetHashCode()");
+
 				Assert.That(resultA, Is.EqualTo(resultC), "resultA != resultC");
+				Assert.That(resultA == resultC, Is.True, "resultA == resultC");
+				Assert.That(resultA != resultC, Is.False, "resultA != resultC");
+				Assert.That(resultA.GetHashCode(), Is.EqualTo(resultC.GetHashCode()), "resultA.GetHashCode() == resultC.GetHashCode()");
+
 				Assert.That(resultB, Is.Not.EqualTo(resultC), "resultB == resultC");
+				Assert.That(resultB == resultC, Is.False, "resultB == resultC");
+				Assert.That(resultB != resultC, Is.True, "resultB != resultC");
+				Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
 			});
 		}
 
@@ -100,4 +134,5 @@ namespace PartiallyApplied.Tests
 			return model.GetDeclaredSymbol(methodSyntax)!;
 		}
 	}
+#pragma warning restore NUnit2010 // Use EqualConstraint for better assertion messages in case of failure
 }

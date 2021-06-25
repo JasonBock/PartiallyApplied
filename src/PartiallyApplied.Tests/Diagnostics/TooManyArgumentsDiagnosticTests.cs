@@ -20,6 +20,7 @@ namespace PartiallyApplied.Tests.Diagnostics
 				Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(TooManyArgumentsDiagnostic.Title));
 				Assert.That(diagnostic.Id, Is.EqualTo(TooManyArgumentsDiagnostic.Id));
 				Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));
+				Assert.That(diagnostic.Descriptor.IsEnabledByDefault, Is.True);
 				Assert.That(diagnostic.Location, Is.EqualTo(node.GetLocation()));
 			});
 		}

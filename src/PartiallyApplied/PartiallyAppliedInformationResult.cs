@@ -28,7 +28,7 @@ namespace PartiallyApplied
 				this.ApplyName == other.ApplyName;
 
 		public override int GetHashCode() =>
-			(this.GetTargetHashCode(), this.PartialArgumentCount).GetHashCode();
+			(this.GetTargetHashCode(), this.ApplyName, this.PartialArgumentCount).GetHashCode();
 
 		private int GetTargetHashCode() =>
 			$"{this.Target.ReturnType.Name}{this.Target.Parameters.Select(_ => _.Type.GetName())}".GetHashCode();

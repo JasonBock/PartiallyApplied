@@ -5,6 +5,11 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Remove="StrykerOutput\**" />
+    <EmbeddedResource Remove="StrykerOutput\**" />
+    <None Remove="StrykerOutput\**" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\PartiallyApplied\PartiallyApplied.csproj" />
   </ItemGroup>
   <ItemGroup>
