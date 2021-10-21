@@ -9,6 +9,7 @@ using Microsoft.CodeAnalysis.Testing;
 
 namespace PartiallyApplied.Tests
 {
+	[NonParallelizable]
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
@@ -49,6 +50,7 @@ public static partial class Partially
 		}
 
 		[Test]
+		[Order(1)]
 		public static async Task GenerateWhenGenericsExistForNonStandardMethodAsync()
 		{
 			var code =
@@ -90,10 +92,11 @@ public static partial class Partially
 		}
 
 		[Test]
-		public static void GenerateUsingApplyRefReturn()
+		[Order(2)]
+		public static async Task GenerateUsingApplyRefReturnAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -113,21 +116,32 @@ public static partial class Partially
 			var incrementBy3 = Partially.ApplyWithRefReturn(Maths.Add, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}WithRefReturn("));
-			});
+			var generatedCode =
+@"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public delegate ref int Target_2_Delegate(int a, int b);
+	public delegate ref int Apply_2_Delegate(int b);
+	public static Apply_1_Delegate ApplyWithRefReturn(Target_2_Delegate method, int a) =>
+		new((b) => ref method(a, b));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
-		public static void GenerateUsingApplyRefReadonlyReturn()
+		[Order(3)]
+		public static async Task GenerateUsingApplyRefReadonlyReturnAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"namespace PartiallTests
 {
 	public static class Maths
 	{
@@ -147,21 +161,31 @@ public static partial class Partially
 			var incrementBy3 = Partially.ApplyWithRefReadonlyReturn(Maths.Add, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}WithRefReadonlyReturn("));
-			});
+			var generatedCode =
+@"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public delegate ref readonly int Target_3_Delegate(int a, int b);
+	public delegate ref readonly int Apply_3_Delegate(int b);
+	public static Apply_1_Delegate ApplyWithRefReadonlyReturn(Target_3_Delegate method, int a) =>
+		new((b) => ref method(a, b));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
-		public static void GenerateWhenInvocationDoesNotExist()
+		public static async Task GenerateWhenInvocationDoesNotExistAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -175,23 +199,31 @@ public static partial class Partially
 			var incrementBy3 = Partially.Apply(Maths.Add, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}("));
-			});
+			var generatedCode =
+@"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
+		new((b) => method(a, b));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
-		public static void GenerateWhenInvocationExists()
+		public static async Task GenerateWhenInvocationExistsAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
+			var code =
 @"using System;
 
-namespace MockTests
+namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -211,21 +243,18 @@ public static partial class Partially
 {
 	public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
 		new((b) => method(a, b));
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Not.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Not.Contain($"{Naming.ApplyMethodName}("));
-			});
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code, 
+				Array.Empty<(Type, string, string)>(),
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
-		public static void GenerateWhenDuplicatesExist()
+		public static async Task GenerateWhenDuplicatesExistAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -241,14 +270,22 @@ public static partial class Partially
 			var tripler = Partially.Apply(Maths.Multiply, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}("));
-			});
+			var generatedCode =
+@"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
+		new((b) => method(a, b));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		private static (ImmutableArray<Diagnostic>, string) GetGeneratedOutput(string source, OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary)
