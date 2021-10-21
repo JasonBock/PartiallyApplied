@@ -1,17 +1,23 @@
-﻿using Microsoft.CodeAnalysis.CSharp;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp;
+using Microsoft.CodeAnalysis.Testing;
 using NUnit.Framework;
+using PartiallyApplied.Builders;
 using System.Collections.Immutable;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.CodeAnalysis.Testing;
 
 namespace PartiallyApplied.Tests
 {
+	// I need to control the id value that is used to uniquely name the delegates.
+	// Therefore, this class is not parallelizable.
 	[NonParallelizable]
 	public static class PartiallyAppliedGeneratorTests
 	{
+		[SetUp]
+		public static void SetUp() => CustomDelegateBuilder.id = 0;
+
 		[Test]
 		public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
 		{
@@ -50,7 +56,6 @@ public static partial class Partially
 		}
 
 		[Test]
-		[Order(1)]
 		public static async Task GenerateWhenGenericsExistForNonStandardMethodAsync()
 		{
 			var code =
@@ -92,7 +97,6 @@ public static partial class Partially
 		}
 
 		[Test]
-		[Order(2)]
 		public static async Task GenerateUsingApplyRefReturnAsync()
 		{
 			var code =
@@ -124,9 +128,9 @@ public static partial class Partially
 #nullable enable
 public static partial class Partially
 {
-	public delegate ref int Target_2_Delegate(int a, int b);
-	public delegate ref int Apply_2_Delegate(int b);
-	public static Apply_1_Delegate ApplyWithRefReturn(Target_2_Delegate method, int a) =>
+	public delegate ref int Target_1_Delegate(int a, int b);
+	public delegate ref int Apply_1_Delegate(int b);
+	public static Apply_1_Delegate ApplyWithRefReturn(Target_1_Delegate method, int a) =>
 		new((b) => ref method(a, b));
 }
 ";
@@ -137,11 +141,10 @@ public static partial class Partially
 		}
 
 		[Test]
-		[Order(3)]
 		public static async Task GenerateUsingApplyRefReadonlyReturnAsync()
 		{
 			var code =
-@"namespace PartiallTests
+@"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -169,9 +172,9 @@ public static partial class Partially
 #nullable enable
 public static partial class Partially
 {
-	public delegate ref readonly int Target_3_Delegate(int a, int b);
-	public delegate ref readonly int Apply_3_Delegate(int b);
-	public static Apply_1_Delegate ApplyWithRefReadonlyReturn(Target_3_Delegate method, int a) =>
+	public delegate ref readonly int Target_1_Delegate(int a, int b);
+	public delegate ref readonly int Apply_1_Delegate(int b);
+	public static Apply_1_Delegate ApplyWithRefReadonlyReturn(Target_1_Delegate method, int a) =>
 		new((b) => ref method(a, b));
 }
 ";

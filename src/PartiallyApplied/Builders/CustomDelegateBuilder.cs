@@ -8,7 +8,7 @@ namespace PartiallyApplied.Builders
 {
 	internal static class CustomDelegateBuilder
 	{
-		private static int id;
+		internal static int id;
 
 		internal static void Build(PartiallyAppliedInformationResult result,
 			IndentedTextWriter writer, NamespaceGatherer gatherer)
