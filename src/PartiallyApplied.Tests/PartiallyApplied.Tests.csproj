@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <AssemblyName>PartiallyApplied.Tests</AssemblyName>
     <RootNamespace>PartiallyApplied.Tests</RootNamespace>
@@ -13,10 +13,21 @@
     <ProjectReference Include="..\PartiallyApplied\PartiallyApplied.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.10.0" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.10.0" />
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp.SourceGenerators.Testing.NUnit" Version="1.1.0">
+      <NoWarn>NU1608</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0">
+      <NoWarn>NU1608</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.Common" Version="3.11.0">
+      <NoWarn>NU1608</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="3.11.0">
+      <NoWarn>NU1608</NoWarn>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.11.0" />
     <PackageReference Include="NUnit" Version="3.13.2" />
-    <PackageReference Include="NUnit.Analyzers" Version="3.1.0" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.2.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.0.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>

@@ -47,7 +47,7 @@ namespace PartiallyApplied
 					information.Results.Length > 0)
 				{
 					var builder = new PartiallyAppliedBuilder(information);
-					context.AddSource("Partially.cs", builder.Code);
+					context.AddSource(Shared.GeneratedFileName, builder.Code);
 				}
 			}
 		}

@@ -1,4 +1,5 @@
-﻿using PartiallyApplied.Extensions;
+﻿using Microsoft.CodeAnalysis;
+using PartiallyApplied.Extensions;
 using System.CodeDom.Compiler;
 using System.Linq;
 using System.Threading;
@@ -21,17 +22,25 @@ namespace PartiallyApplied.Builders
 			}
 
 			var id = Interlocked.Increment(ref CustomDelegateBuilder.id);
-			var targetDelegateName = $"Target_{id}_Delegate";
-			var targetDelegateParameters = string.Join(", ", 
-				target.Parameters.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
-			var applyDelegateName = $"Apply_{id}_Delegate";
-			var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount)
-				.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
+
 			var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount)
 				.Select(_ => $"{_.Type.GetName()} {_.Name}"));
 			var applyOpenGenerics = target.TypeParameters.Length > 0 ?
 				$"<{string.Join(", ", target.TypeParameters.Select(_ => _.Name))}>" : string.Empty;
 			var applyName = $"{result.ApplyName}{applyOpenGenerics}";
+
+			var targetDelegateParameters = string.Join(", ", 
+				target.Parameters.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
+			// NOTE: The number of open generics for the target delegate is the same as the apply method.
+			var targetDelegateName = $"Target_{id}_Delegate{applyOpenGenerics}";
+
+			var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount)
+				.Select(_ => _.HasExplicitDefaultValue ? $"{_.Type.GetName()} {_.Name} = {_.ExplicitDefaultValue.GetDefaultValue()}" : $"{_.Type.GetName()} {_.Name}"));
+			var applyDelegateGenerics = target.Parameters.Skip(result.PartialArgumentCount)
+				.Where(_ => _.Type.Kind == SymbolKind.TypeParameter).ToArray();
+			var applyDelegateOpenGenerics = applyDelegateGenerics.Length > 0 ?
+				$"<{string.Join(", ", applyDelegateGenerics.Select(_ => _.Type.GetName()))}>" : string.Empty;
+			var applyDelegateName = $"Apply_{id}_Delegate{applyDelegateOpenGenerics}";
 
 			var refReturn = target.ReturnsByRef ? "ref " :
 				target.ReturnsByRefReadonly ? "ref readonly " : string.Empty;

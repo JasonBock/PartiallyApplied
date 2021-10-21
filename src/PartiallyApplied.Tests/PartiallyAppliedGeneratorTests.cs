@@ -4,16 +4,18 @@ using NUnit.Framework;
 using System.Collections.Immutable;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.CodeAnalysis.Testing;
 
 namespace PartiallyApplied.Tests
 {
 	public static class PartiallyAppliedGeneratorTests
 	{
 		[Test]
-		public static void GenerateWhenGenericsExistForStandardMethod()
+		public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -24,45 +26,67 @@ namespace PartiallyApplied.Tests
 	{
 		public static void Generate()
 		{
-			var combineWith3 = Partially.Apply(Maths.Combine, 3);
+			var combineWith3 = Partially.Apply<int>(Maths.Combine, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
-			});
+			var generatedCode =
+@"using PartiallyTests;
+using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Action<T> Apply<T>(Action<int, T> method, int a) =>
+		new((b) => method(a, b));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
-		public static void GenerateWhenGenericsExistForNonStandardMethod()
+		public static async Task GenerateWhenGenericsExistForNonStandardMethodAsync()
 		{
-			var (diagnostics, output) = PartiallyAppliedGeneratorTests.GetGeneratedOutput(
-@"namespace MockTests
+			var code =
+@"using System;
+
+namespace PartiallyTests
 {
 	public static class Maths
 	{
-		public static void Contains<T>(int value, Span<int> buffer, T value) { }
+		public static void Contains<T>(int value, Span<int> buffer, T value2) { }
 	}
 
 	public static class Test
 	{
 		public static void Generate()
 		{
-			var combineWith3 = Partially.Apply(Maths.Contains, 3);
+			var combineWith3 = Partially.Apply<int>(Maths.Contains, 3);
 		}
 	}
-}");
+}";
 
-			Assert.Multiple(() =>
-			{
-				Assert.That(diagnostics.Length, Is.EqualTo(0));
-				Assert.That(output, Does.Contain("public static partial class Partially"));
-				Assert.That(output, Does.Contain($"{Naming.ApplyMethodName}<T>("));
-			});
+			var generatedCode =
+@"using PartiallyTests;
+using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public delegate void Target_1_Delegate<T>(int value, Span<int> buffer, T value2);
+	public delegate void Apply_1_Delegate<T>(Span<int> buffer, T value2);
+	public static Apply_1_Delegate<T> Apply<T>(Target_1_Delegate<T> method, int value) =>
+		new((buffer, value2) => method(value, buffer, value2));
+}
+";
+
+			await TestAssistants.RunAsync<PartiallyAppliedGenerator>(code,
+				new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+				Enumerable.Empty<DiagnosticResult>());
 		}
 
 		[Test]
