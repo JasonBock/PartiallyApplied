@@ -16,6 +16,43 @@ public static class PartiallyAppliedGeneratorTests
 	public static void SetUp() => CustomDelegateBuilder.id = 0;
 
 	[Test]
+	public static async Task GenerateIncrementalWhenGenericsExistForStandardMethodAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
+{
+	public static class Maths
+	{
+		public static void Combine<T>(int a, T b) { } 
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var combineWith3 = Partially.Apply<int>(Maths.Combine, 3);
+		}
+	}
+}";
+
+		var generatedCode =
+ @"using PartiallyTests;
+using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Action<T> Apply<T>(Action<int, T> method, int a) =>
+		new((b) => method(a, b));
+}
+";
+
+		await TestAssistants.RunIncrementalAsync(code,
+			new[] { (typeof(PartiallyAppliedIncrementalGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
+
+	[Test]
 	public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
 	{
 		var code =
