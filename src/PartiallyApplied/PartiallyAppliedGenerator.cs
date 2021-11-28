@@ -1,36 +1,35 @@
 ﻿using Microsoft.CodeAnalysis;
 using PartiallyApplied.Builders;
-using System.Linq;
+using System.Collections.Immutable;
 
-namespace PartiallyApplied
+namespace PartiallyApplied;
+
+[Generator]
+public sealed class PartiallyAppliedGenerator
+	 : ISourceGenerator
 {
-	[Generator]
-	public sealed class PartiallyAppliedGenerator
-		: ISourceGenerator
+	public void Execute(GeneratorExecutionContext context)
 	{
-		public void Execute(GeneratorExecutionContext context)
+		if (context.SyntaxReceiver is PartiallyAppliedReceiver receiver)
 		{
-			if (context.SyntaxReceiver is PartiallyAppliedReceiver receiver)
+			var compilation = context.Compilation;
+			context.CancellationToken.ThrowIfCancellationRequested();
+			var information = new PartiallyAppliedInformation(receiver.Candidates.ToImmutableArray(), compilation);
+
+			foreach (var diagnostic in information.Diagnostics)
 			{
-				var compilation = context.Compilation;
-				context.CancellationToken.ThrowIfCancellationRequested();
-				var information = new PartiallyAppliedInformation(receiver.Candidates, compilation);
+				context.ReportDiagnostic(diagnostic);
+			}
 
-				foreach (var diagnostic in information.Diagnostics)
-				{
-					context.ReportDiagnostic(diagnostic);
-				}
-
-				if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
-					information.Results.Length > 0)
-				{
-					var builder = new PartiallyAppliedBuilder(information);
-					context.AddSource(Shared.GeneratedFileName, builder.Code);
-				}
+			if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
+				information.Results.Length > 0)
+			{
+				var builder = new PartiallyAppliedBuilder(information);
+				context.AddSource(Shared.GeneratedFileName, builder.Code);
 			}
 		}
-
-		public void Initialize(GeneratorInitializationContext context) =>
-			context.RegisterForSyntaxNotifications(() => new PartiallyAppliedReceiver());
 	}
+
+	public void Initialize(GeneratorInitializationContext context) =>
+		context.RegisterForSyntaxNotifications(() => new PartiallyAppliedReceiver());
 }

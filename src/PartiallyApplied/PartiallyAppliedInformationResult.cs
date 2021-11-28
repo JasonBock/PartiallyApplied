@@ -1,40 +1,36 @@
 ﻿using Microsoft.CodeAnalysis;
 using PartiallyApplied.Extensions;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace PartiallyApplied
+namespace PartiallyApplied;
+
+public sealed class PartiallyAppliedInformationResult
+	 : IEquatable<PartiallyAppliedInformationResult?>
 {
-	public sealed class PartiallyAppliedInformationResult 
-		: IEquatable<PartiallyAppliedInformationResult?>
-	{
-		public PartiallyAppliedInformationResult(IMethodSymbol target, int partialArgumentCount, string applyName) =>
-			(this.Target, this.PartialArgumentCount, this.ApplyName) = (target, partialArgumentCount, applyName);
+	public PartiallyAppliedInformationResult(IMethodSymbol target, int partialArgumentCount, string applyName) =>
+		(this.Target, this.PartialArgumentCount, this.ApplyName) = (target, partialArgumentCount, applyName);
 
-		public static bool operator ==(PartiallyAppliedInformationResult left, PartiallyAppliedInformationResult right) => 
-			EqualityComparer<PartiallyAppliedInformationResult>.Default.Equals(left, right);
-		
-		public static bool operator !=(PartiallyAppliedInformationResult left, PartiallyAppliedInformationResult right) => 
-			!(left == right);
+	public static bool operator ==(PartiallyAppliedInformationResult left, PartiallyAppliedInformationResult right) =>
+		EqualityComparer<PartiallyAppliedInformationResult>.Default.Equals(left, right);
 
-		public override bool Equals(object? obj) => 
-			this.Equals(obj as PartiallyAppliedInformationResult);
+	public static bool operator !=(PartiallyAppliedInformationResult left, PartiallyAppliedInformationResult right) =>
+		!(left == right);
 
-		public bool Equals(PartiallyAppliedInformationResult? other) =>
-			other is not null &&
-				this.PartialArgumentCount == other.PartialArgumentCount &&
-				this.Target.AreEqual(other.Target) &&
-				this.ApplyName == other.ApplyName;
+	public override bool Equals(object? obj) =>
+		this.Equals(obj as PartiallyAppliedInformationResult);
 
-		public override int GetHashCode() =>
-			(this.GetTargetHashCode(), this.ApplyName, this.PartialArgumentCount).GetHashCode();
+	public bool Equals(PartiallyAppliedInformationResult? other) =>
+		other is not null &&
+			this.PartialArgumentCount == other.PartialArgumentCount &&
+			this.Target.AreEqual(other.Target) &&
+			this.ApplyName == other.ApplyName;
 
-		private int GetTargetHashCode() =>
-			$"{this.Target.ReturnType.Name}{this.Target.Parameters.Select(_ => _.Type.GetName())}".GetHashCode();
+	public override int GetHashCode() =>
+		(this.GetTargetHashCode(), this.ApplyName, this.PartialArgumentCount).GetHashCode();
 
-		public string ApplyName { get; }
-		public int PartialArgumentCount { get; }
-		public IMethodSymbol Target { get; }
-	}
+	private int GetTargetHashCode() =>
+		$"{this.Target.ReturnType.Name}{this.Target.Parameters.Select(_ => _.Type.GetName())}".GetHashCode();
+
+	public string ApplyName { get; }
+	public int PartialArgumentCount { get; }
+	public IMethodSymbol Target { get; }
 }

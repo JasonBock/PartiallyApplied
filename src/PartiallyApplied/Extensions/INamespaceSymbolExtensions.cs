@@ -1,10 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace PartiallyApplied.Extensions
+namespace PartiallyApplied.Extensions;
+
+internal static class INamespaceSymbolExtensions
 {
-	public static class INamespaceSymbolExtensions
-	{
-		internal static string GetName(this INamespaceSymbol? self) =>
-			self?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat) ?? string.Empty;
-	}
+	internal static string GetName(this INamespaceSymbol? self) =>
+		self?.ToDisplayString(SymbolDisplayFormat.CSharpErrorMessageFormat) ?? string.Empty;
 }

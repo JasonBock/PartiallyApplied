@@ -2,89 +2,86 @@
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using PartiallyApplied.Diagnostics;
 using PartiallyApplied.Extensions;
-using System.Collections.Generic;
 using System.Collections.Immutable;
-using System.Linq;
 
-namespace PartiallyApplied
+namespace PartiallyApplied;
+
+public sealed class PartiallyAppliedInformation
 {
-	public sealed class PartiallyAppliedInformation
+	private readonly ImmutableArray<InvocationExpressionSyntax> candidates;
+	private readonly Compilation compilation;
+
+	public PartiallyAppliedInformation(ImmutableArray<InvocationExpressionSyntax> candidates, Compilation compilation)
 	{
-		private readonly List<InvocationExpressionSyntax> candidates;
-		private readonly Compilation compilation;
+		(this.candidates, this.compilation) = (candidates, compilation);
+		this.Validate();
+	}
 
-		public PartiallyAppliedInformation(List<InvocationExpressionSyntax> candidates, Compilation compilation)
+	private void Validate()
+	{
+		var diagnostics = new List<Diagnostic>();
+		var results = new List<PartiallyAppliedInformationResult>(this.candidates.Length);
+
+		foreach (var candidate in this.candidates)
 		{
-			(this.candidates, this.compilation) = (candidates, compilation);
-			this.Validate();
-		}
+			var model = this.compilation.GetSemanticModel(candidate.SyntaxTree);
 
-		private void Validate()
-		{
-			var diagnostics = new List<Diagnostic>();
-			var results = new List<PartiallyAppliedInformationResult>(this.candidates.Count);
-
-			foreach (var candidate in this.candidates)
+			if (candidate.ArgumentList.Arguments.Count < 2)
 			{
-				var model = this.compilation.GetSemanticModel(candidate.SyntaxTree);
+				diagnostics.Add(IncorrectApplyArgumentCountDiagnostic.Create(candidate));
+			}
+			else
+			{
+				var arguments = candidate.ArgumentList.Arguments;
+				var delegateArgument = arguments[0];
+				var (delegateSymbol, wasFound) = delegateArgument.Expression.TryGetMethodSymbol(model);
 
-				if (candidate.ArgumentList.Arguments.Count < 2)
+				if (delegateSymbol is null)
 				{
-					diagnostics.Add(IncorrectApplyArgumentCountDiagnostic.Create(candidate));
+					diagnostics.Add(NoTargetMethodFoundDiagnostic.Create(delegateArgument));
 				}
-				else
+				else if (!wasFound)
 				{
-					var arguments = candidate.ArgumentList.Arguments;
-					var delegateArgument = arguments[0];
-					var (delegateSymbol, wasFound) = delegateArgument.Expression.TryGetMethodSymbol(model);
-
-					if (delegateSymbol is null)
+					if (delegateSymbol.Parameters.Length < 2)
 					{
-						diagnostics.Add(NoTargetMethodFoundDiagnostic.Create(delegateArgument));
+						diagnostics.Add(MinimalParameterCountNotMetDiagnostic.Create(delegateArgument));
 					}
-					else if (!wasFound)
+					else
 					{
-						if (delegateSymbol.Parameters.Length < 2)
+						if (arguments.Count > delegateSymbol.Parameters.Length)
 						{
-							diagnostics.Add(MinimalParameterCountNotMetDiagnostic.Create(delegateArgument));
+							diagnostics.Add(TooManyArgumentsDiagnostic.Create(candidate));
 						}
 						else
 						{
-							if (arguments.Count > delegateSymbol.Parameters.Length)
+							var partialArgumentCount = arguments.Count - 1;
+
+							if (delegateSymbol.Parameters.Any(_ => _.RefKind == RefKind.Ref ||
+								_.RefKind == RefKind.Out || _.RefKind == RefKind.In))
 							{
-								diagnostics.Add(TooManyArgumentsDiagnostic.Create(candidate));
+								diagnostics.Add(UnsupportedParameterModifiersDiagnostic.Create(candidate));
 							}
-							else
+
+							if (delegateSymbol.Parameters.Take(partialArgumentCount).Any(_ => _.Type.IsRefLikeType))
 							{
-								var partialArgumentCount = arguments.Count - 1;
+								diagnostics.Add(CannotPartiallyApplyRefStructDiagnostic.Create(candidate));
+							}
 
-								if (delegateSymbol.Parameters.Any(_ => _.RefKind == RefKind.Ref ||
-									_.RefKind == RefKind.Out || _.RefKind == RefKind.In))
-								{
-									diagnostics.Add(UnsupportedParameterModifiersDiagnostic.Create(candidate));
-								}
-
-								if (delegateSymbol.Parameters.Take(partialArgumentCount).Any(_ => _.Type.IsRefLikeType))
-								{
-									diagnostics.Add(CannotPartiallyApplyRefStructDiagnostic.Create(candidate));
-								}
-
-								if (diagnostics.Count == 0)
-								{
-									var applyName = (candidate.Expression as MemberAccessExpressionSyntax)!.Name.Identifier.Text;
-									results.Add(new(delegateSymbol, partialArgumentCount, applyName));
-								}
+							if (diagnostics.Count == 0)
+							{
+								var applyName = (candidate.Expression as MemberAccessExpressionSyntax)!.Name.Identifier.Text;
+								results.Add(new(delegateSymbol, partialArgumentCount, applyName));
 							}
 						}
 					}
 				}
 			}
-
-			this.Diagnostics = diagnostics.ToImmutableArray();
-			this.Results = results.ToImmutableArray();
 		}
 
-		public ImmutableArray<Diagnostic> Diagnostics { get; private set; }
-		public ImmutableArray<PartiallyAppliedInformationResult> Results { get; private set; }
+		this.Diagnostics = diagnostics.ToImmutableArray();
+		this.Results = results.ToImmutableArray();
 	}
+
+	public ImmutableArray<Diagnostic> Diagnostics { get; private set; }
+	public ImmutableArray<PartiallyAppliedInformationResult> Results { get; private set; }
 }

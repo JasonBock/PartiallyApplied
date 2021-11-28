@@ -1,19 +1,17 @@
 ﻿using NUnit.Framework;
 using PartiallyApplied.Extensions;
 using System.Collections.Immutable;
-using System.Linq;
 
-namespace PartiallyApplied.Tests.Extensions
+namespace PartiallyApplied.Tests.Extensions;
+
+public static class ImmutableHashSetBuilderExtensionsAddRangeTests
 {
-	public static class ImmutableHashSetBuilderExtensionsAddRangeTests
+	[Test]
+	public static void AddRange()
 	{
-		[Test]
-		public static void AddRange()
-		{
-			var builder = ImmutableHashSet.CreateBuilder<int>();
-			builder.AddRange(Enumerable.Range(0, 3));
+		var builder = ImmutableHashSet.CreateBuilder<int>();
+		builder.AddRange(Enumerable.Range(0, 3));
 
-			Assert.That(builder.Count, Is.EqualTo(3));
-		}
+		Assert.That(builder.Count, Is.EqualTo(3));
 	}
 }

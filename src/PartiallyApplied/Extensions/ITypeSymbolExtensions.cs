@@ -1,10 +1,9 @@
 ﻿using Microsoft.CodeAnalysis;
 
-namespace PartiallyApplied.Extensions
+namespace PartiallyApplied.Extensions;
+
+internal static class ITypeSymbolExtensions
 {
-	public static class ITypeSymbolExtensions
-	{
-		public static string GetName(this ITypeSymbol self) =>
-			self.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
-	}
+	internal static string GetName(this ITypeSymbol self) =>
+		self.ToDisplayString(SymbolDisplayFormat.MinimallyQualifiedFormat);
 }

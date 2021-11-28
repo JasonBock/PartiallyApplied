@@ -1,7 +1,6 @@
-﻿namespace PartiallyApplied.Diagnostics
+﻿namespace PartiallyApplied.Diagnostics;
+
+public static class DiagnosticConstants
 {
-	public static class DiagnosticConstants
-	{
-		public const string Usage = nameof(DiagnosticConstants.Usage);
-	}
+	public const string Usage = nameof(DiagnosticConstants.Usage);
 }

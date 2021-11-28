@@ -37,9 +37,13 @@ dotnet_diagnostic.CA1030.severity = none
 # CA1303: Do not pass literals as localized parameters
 dotnet_diagnostic.CA1303.severity = none
 
-# RS1024: Compare symbols correctly
-# Once https://github.com/dotnet/roslyn-analyzers/issues/4414 is addressed, this should be removed
-dotnet_diagnostic.RS1024.severity = none
+# CA1014: Mark assemblies with CLSCompliant
+dotnet_diagnostic.CA1014.severity = none
+
+# CA1812: Program is an internal class...
+dotnet_diagnostic.CA1812.severity = none
+
+dotnet_diagnostics.NU1603.severity = none
 
 # NUnit analyzer settings
 dotnet_diagnostic.NUnit2029.severity=error
