@@ -2,17 +2,18 @@
 using Microsoft.CodeAnalysis.Text;
 using PartiallyApplied.Extensions;
 using System.CodeDom.Compiler;
+using System.Collections.Immutable;
 using System.Text;
 
 namespace PartiallyApplied.Builders;
 
 public sealed class PartiallyAppliedBuilder
 {
-	private readonly PartiallyAppliedInformation information;
+	private readonly ImmutableHashSet<PartiallyAppliedInformationResult> results;
 
-	public PartiallyAppliedBuilder(PartiallyAppliedInformation information)
+	public PartiallyAppliedBuilder(ImmutableHashSet<PartiallyAppliedInformationResult> results)
 	{
-		this.information = information;
+		this.results = results;
 		this.Code = SourceText.From(this.Build(), Encoding.UTF8);
 	}
 
@@ -26,15 +27,17 @@ public sealed class PartiallyAppliedBuilder
 		writer.WriteLine($"public static partial class {Naming.PartiallyClassName}");
 		writer.WriteLine("{");
 		writer.Indent++;
-		var result = this.information.Result!;
 
-		if (result.Target.IsStandard())
+		foreach (var result in this.results)
 		{
-			StandardDelegateBuilder.Build(result, writer, gatherer);
-		}
-		else
-		{
-			CustomDelegateBuilder.Build(result, writer, gatherer);
+			if (result.Target.IsStandard())
+			{
+				StandardDelegateBuilder.Build(result, writer, gatherer);
+			}
+			else
+			{
+				CustomDelegateBuilder.Build(result, writer, gatherer);
+			}
 		}
 
 		writer.Indent--;

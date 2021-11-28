@@ -55,13 +55,14 @@ public sealed class PartiallyAppliedGenerator
 				if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
 					information.Result is not null)
 				{
-					if (results.Add(information.Result))
-					{
-						var builder = new PartiallyAppliedBuilder(information);
-						context.AddSource(Shared.GeneratedFileName, builder.Code);
-
-					}
+					results.Add(information.Result);
 				}
+			}
+
+			if (results.Count > 0)
+			{
+				var builder = new PartiallyAppliedBuilder(results.ToImmutableHashSet());
+				context.AddSource(Shared.GeneratedFileName, builder.Code);
 			}
 		}
 	}
