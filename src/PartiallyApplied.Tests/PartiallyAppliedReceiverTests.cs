@@ -1,4 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
+﻿/*
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.CSharp;
 using NUnit.Framework;
 
@@ -28,3 +29,4 @@ public static class PartiallyAppliedReceiverTests
 		});
 	}
 }
+*/

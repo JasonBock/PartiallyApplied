@@ -6,7 +6,7 @@ using System.Collections.Immutable;
 namespace PartiallyApplied;
 
 [Generator]
-public sealed class PartiallyAppliedIncrementalGenerator
+public sealed class PartiallyAppliedGenerator
 	: IIncrementalGenerator
 {
 	public void Initialize(IncrementalGeneratorInitializationContext context)
@@ -41,9 +41,11 @@ public sealed class PartiallyAppliedIncrementalGenerator
 	{
 		if (targets.Length > 0)
 		{
+			var results = new HashSet<PartiallyAppliedInformationResult>();
+
 			foreach (var target in targets.Distinct())
 			{
-				var information = new PartiallyAppliedIncrementalInformation(target, compilation);
+				var information = new PartiallyAppliedInformation(target, compilation);
 
 				foreach (var diagnostic in information.Diagnostics)
 				{
@@ -53,40 +55,44 @@ public sealed class PartiallyAppliedIncrementalGenerator
 				if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
 					information.Result is not null)
 				{
-					var builder = new PartiallyAppliedIncrementalBuilder(information);
-					context.AddSource(Shared.GeneratedFileName, builder.Code);
+					if (results.Add(information.Result))
+					{
+						var builder = new PartiallyAppliedBuilder(information);
+						context.AddSource(Shared.GeneratedFileName, builder.Code);
+
+					}
 				}
 			}
 		}
 	}
 }
 
-[Generator]
-public sealed class PartiallyAppliedGenerator
-	: ISourceGenerator
-{
-	public void Execute(GeneratorExecutionContext context)
-	{
-		if (context.SyntaxReceiver is PartiallyAppliedReceiver receiver)
-		{
-			var compilation = context.Compilation;
-			context.CancellationToken.ThrowIfCancellationRequested();
-			var information = new PartiallyAppliedInformation(receiver.Candidates.ToImmutableArray(), compilation);
+//[Generator]
+//public sealed class PartiallyAppliedGenerator
+//	: ISourceGenerator
+//{
+//	public void Execute(GeneratorExecutionContext context)
+//	{
+//		if (context.SyntaxReceiver is PartiallyAppliedReceiver receiver)
+//		{
+//			var compilation = context.Compilation;
+//			context.CancellationToken.ThrowIfCancellationRequested();
+//			var information = new PartiallyAppliedInformation(receiver.Candidates.ToImmutableArray(), compilation);
 
-			foreach (var diagnostic in information.Diagnostics)
-			{
-				context.ReportDiagnostic(diagnostic);
-			}
+//			foreach (var diagnostic in information.Diagnostics)
+//			{
+//				context.ReportDiagnostic(diagnostic);
+//			}
 
-			if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
-				information.Results.Length > 0)
-			{
-				var builder = new PartiallyAppliedBuilder(information);
-				context.AddSource(Shared.GeneratedFileName, builder.Code);
-			}
-		}
-	}
+//			if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
+//				information.Results.Length > 0)
+//			{
+//				var builder = new PartiallyAppliedBuilder(information);
+//				context.AddSource(Shared.GeneratedFileName, builder.Code);
+//			}
+//		}
+//	}
 
-	public void Initialize(GeneratorInitializationContext context) =>
-		context.RegisterForSyntaxNotifications(() => new PartiallyAppliedReceiver());
-}
+//	public void Initialize(GeneratorInitializationContext context) =>
+//		context.RegisterForSyntaxNotifications(() => new PartiallyAppliedReceiver());
+//}
