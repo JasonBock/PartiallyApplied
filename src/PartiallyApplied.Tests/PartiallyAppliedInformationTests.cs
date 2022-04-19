@@ -26,7 +26,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -47,7 +47,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -68,7 +68,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -95,7 +95,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == CannotPartiallyApplyRefStructDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -122,8 +122,8 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Length, Is.EqualTo(0));
-			Assert.That(information.Result, Is.Not.Null);
-			var result = information.Result!;
+			Assert.That(information.Results.Length, Is.GreaterThan(0));
+			var result = information.Results[0];
 			Assert.That(result.Target.Name, Is.EqualTo("Contains"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		});
@@ -146,7 +146,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == IncorrectApplyArgumentCountDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -167,7 +167,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == NoTargetMethodFoundDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -188,7 +188,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == MinimalParameterCountNotMetDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -209,7 +209,7 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == TooManyArgumentsDiagnostic.Id), Is.True);
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -243,7 +243,7 @@ public static class Partially
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Length, Is.EqualTo(0));
-			Assert.That(information.Result, Is.Null);
+			Assert.That(information.Results.Length, Is.EqualTo(0));
 		});
 	}
 
@@ -265,8 +265,8 @@ public static class Runner
 		Assert.Multiple(() =>
 		{
 			Assert.That(information.Diagnostics.Length, Is.EqualTo(0));
-			Assert.That(information.Result, Is.Not.Null);
-			var result = information.Result!;
+			Assert.That(information.Results.Length, Is.GreaterThan(0));
+			var result = information.Results[0];
 			Assert.That(result.Target.Name, Is.EqualTo("Add"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		});

@@ -1,25 +1,36 @@
 ﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis;
+using System.Collections.Immutable;
 
 namespace PartiallyApplied.Extensions;
 
 internal static class ExpressionSyntaxExtensions
 {
-	internal static (IMethodSymbol?, bool) TryGetMethodSymbol(this ExpressionSyntax self, SemanticModel model)
+	internal static ImmutableArray<(IMethodSymbol?, bool)> TryGetMethodSymbols(this ExpressionSyntax self, SemanticModel model)
 	{
+		var symbols = new List<(IMethodSymbol?, bool)>();
+
 		var symbol = model.GetSymbolInfo(self);
 
 		if (symbol.Symbol is IMethodSymbol methodSymbol)
 		{
-			return (methodSymbol, true);
+			symbols.Add((methodSymbol, true));
 		}
-		else if (symbol.CandidateSymbols.Length > 0 && symbol.CandidateSymbols[0] is IMethodSymbol methodFromCandidateSymbol)
+		else if (symbol.CandidateSymbols.Length > 0)
 		{
-			return (methodFromCandidateSymbol, false);
+			foreach (var candidate in symbol.CandidateSymbols)
+			{
+				if (candidate is IMethodSymbol methodFromCandidateSymbol)
+				{
+					symbols.Add((methodFromCandidateSymbol, false));
+				}
+			}
 		}
 		else
 		{
-			return (null, false);
+			symbols.Add((null, false));
 		}
+
+		return symbols.ToImmutableArray();
 	}
 }

@@ -284,4 +284,45 @@ public static partial class Partially
 			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
 			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
 	}
+
+	[Test]
+	public static async Task GenerateWhenOverloadsExistAsync()
+	{
+		var code =
+ @"using System;
+
+namespace PartiallyTests
+{
+	public static class Overloads
+	{
+		public static void Foo(Guid a, int b, int c, Guid d) { }
+		public static void Foo(int a, string b, Guid c) { }
+	}
+
+	public static class Test
+	{
+		public static void Generate()
+		{
+			var method = Partially.Apply(Overloads.Foo, 3);
+		}
+	}
+}";
+
+		var generatedCode =
+ @"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Action<int, int, Guid> Apply(Action<Guid, int, int, Guid> method, Guid a) =>
+		new((b, c, d) => method(a, b, c, d));
+	public static Action<string, Guid> Apply(Action<int, string, Guid> method, int a) =>
+		new((b, c) => method(a, b, c));
+}
+";
+
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 }

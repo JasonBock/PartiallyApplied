@@ -26,7 +26,7 @@ public static class Runner
 }";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
-		var (method, wasFound) = expression.TryGetMethodSymbol(model);
+		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
 		Assert.Multiple(() =>
 		{
@@ -53,7 +53,7 @@ public static class Runner
 }";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
-		var (method, wasFound) = expression.TryGetMethodSymbol(model);
+		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
 		Assert.Multiple(() =>
 		{
@@ -80,7 +80,7 @@ public static class Runner
 }";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<MemberAccessExpressionSyntax>(code);
-		var (method, wasFound) = expression.TryGetMethodSymbol(model);
+		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
 		Assert.Multiple(() =>
 		{

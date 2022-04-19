@@ -53,9 +53,12 @@ public sealed class PartiallyAppliedGenerator
 				}
 
 				if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
-					information.Result is not null)
+					information.Results.Length > 0)
 				{
-					results.Add(information.Result);
+					foreach (var result in information.Results)
+					{
+						results.Add(result);
+					}
 				}
 			}
 
