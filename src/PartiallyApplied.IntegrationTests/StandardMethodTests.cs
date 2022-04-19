@@ -13,8 +13,30 @@ public static class Maths
 		$"{a}, {b}, {c}";
 }
 
+public static class MethodOverloads
+{
+	public static string Combine(string a, int b, int c, string d) =>
+		$"{a}, {b}, {c}, {d}";
+	public static string Combine(int a, string b, string c) =>
+		$"{a}, {b}, {c}";
+}
+
 public static class StandardMethodTests
 {
+	[Test]
+	public static void ApplyForOverloadStartingWithInt()
+	{
+		var overloadCombineInt = Partially.Apply(MethodOverloads.Combine, 3);
+		Assert.That(overloadCombineInt("b", "c"), Is.EqualTo("3, b, c"));
+	}
+
+	[Test]
+	public static void ApplyForOverloadStartingWithString()
+	{
+		var overloadCombineString = Partially.Apply(MethodOverloads.Combine, "3");
+		Assert.That(overloadCombineString(2, 3, "4"), Is.EqualTo("3, 2, 3, 4"));
+	}
+
 	[Test]
 	public static void ApplyForGenericEnd()
 	{
