@@ -12,18 +12,20 @@ public static class ExpressionSyntaxExtensionsTryGetMethodSymbolTests
 	public static void TryGetMethodSymbolWhenMethodResolves()
 	{
 		var code =
- @"public static class Targets
-{
-	public static void Foo() { }
-}
+		"""
+		public static class Targets
+		{
+			public static void Foo() { }
+		}
 
-public static class Runner
-{
-	public static void Run()
-	{
-		Targets.Foo();
-	}
-}";
+		public static class Runner
+		{
+			public static void Run()
+			{
+				Targets.Foo();
+			}
+		}
+		""";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
@@ -39,18 +41,20 @@ public static class Runner
 	public static void TryGetMethodSymbolWhenMethodIsACandidate()
 	{
 		var code =
- @"public static class Targets
-{
-	public static void Foo() { }
-}
+			"""
+			public static class Targets
+			{
+				public static void Foo() { }
+			}
 
-public static class Runner
-{
-	public static void Run()
-	{
-		Targets.Foo(3);
-	}
-}";
+			public static class Runner
+			{
+				public static void Run()
+				{
+					Targets.Foo(3);
+				}
+			}
+			""";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
@@ -66,18 +70,20 @@ public static class Runner
 	public static void TryGetMethodSymbolWhenExpressionIsNotAMethod()
 	{
 		var code =
- @"public static class Targets
-{
-	public static int Foo { get; }
-}
+		"""
+		public static class Targets
+		{
+			public static int Foo { get; }
+		}
 
-public static class Runner
-{
-	public static void Run()
-	{
-		var value = Targets.Foo;
-	}
-}";
+		public static class Runner
+		{
+			public static void Run()
+			{
+				var value = Targets.Foo;
+			}
+		}
+		""";
 
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<MemberAccessExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];

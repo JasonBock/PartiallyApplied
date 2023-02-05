@@ -5,7 +5,10 @@ namespace PartiallyApplied.Tests.Extensions;
 
 public static class ObjectExtensionsGetDefaultValueTests
 {
-	[TestCase("b", "\"b\"")]
+	[TestCase("b", 
+		"""
+		"b"
+		""")]
 	[TestCase(true, "true")]
 	[TestCase(false, "false")]
 	[TestCase(null, "null")]

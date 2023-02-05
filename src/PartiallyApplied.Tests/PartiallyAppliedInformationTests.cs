@@ -13,15 +13,17 @@ public static class PartiallyAppliedInformationTests
 	public static void CreateWhenTargetHasRefParameters()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int AddByRef(int a, ref int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int AddByRef(int a, ref int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.AddByRef, 3);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.AddByRef, 3);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -34,15 +36,17 @@ public static class Runner
 	public static void CreateWhenTargetHasOutParameters()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int AddByOut(int a, out int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int AddByOut(int a, out int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.AddByOut, 2);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.AddByOut, 2);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -55,15 +59,17 @@ public static class Runner
 	public static void CreateWhenTargetHasInParameters()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int AddByIn(int a, in int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int AddByIn(int a, in int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.AddByIn, 3);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.AddByIn, 3);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -76,21 +82,23 @@ public static class Runner
 	public static void CreateWhenTargetHasRefStructParametersBeingPartiallyApplied()
 	{
 		var code =
- @"using System;
+			"""
+			using System;
 
-public static class Maths
-{
-	public static int Contains(Span<int> a, int b) => a.Contains(b);
-}
+			public static class Maths
+			{
+				public static int Contains(Span<int> a, int b) => a.Contains(b);
+			}
 
-public static class Runner
-{
-	public static void Run()
-	{
-		var buffer = new Span<int>(new [] { 3 });
-		Partially.Apply(Maths.Contains, buffer);
-	}
-}";
+			public static class Runner
+			{
+				public static void Run()
+				{
+					var buffer = new Span<int>(new [] { 3 });
+					Partially.Apply(Maths.Contains, buffer);
+				}
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -103,21 +111,23 @@ public static class Runner
 	public static void CreateWhenTargetHasRefStructParametersNotBeingPartiallyApplied()
 	{
 		var code =
- @"using System;
+			"""
+			using System;
 
-public static class Maths
-{
-	public static int Contains(int a, Span<int> b) => b.Contains(a);
-}
+			public static class Maths
+			{
+				public static int Contains(int a, Span<int> b) => b.Contains(a);
+			}
 
-public static class Runner
-{
-	public static void Run()
-	{
-		var buffer = new Span<int>(new [] { 3 });
-		Partially.Apply(Maths.Contains, 3);
-	}
-}";
+			public static class Runner
+			{
+				public static void Run()
+				{
+					var buffer = new Span<int>(new [] { 3 });
+					Partially.Apply(Maths.Contains, 3);
+				}
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -133,15 +143,17 @@ public static class Runner
 	public static void CreateWhenApplyHasLessThan2Parameters()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Add(int a, int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int Add(int a, int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Add);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Add);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -154,15 +166,17 @@ public static class Runner
 	public static void CreateWhenMethodDoesNotExist()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Add(int a, int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int Add(int a, int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Subtract, 3);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Subtract, 3);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -175,15 +189,17 @@ public static class Runner
 	public static void CreateWhenMethodOnlyHas1Parameter()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Reflect(int a) => a;
-}
+			"""
+			public static class Maths
+			{
+				public static int Reflect(int a) => a;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Reflect, 3);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Reflect, 3);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -196,15 +212,17 @@ public static class Runner
 	public static void CreateWhenTooManyArgumentsArePassed()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Add(int a, int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int Add(int a, int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Add, 3, 4);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Add, 3, 4);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 		Assert.Multiple(() =>
 		{
@@ -217,27 +235,29 @@ public static class Runner
 	public static void CreateWhenApplyMethodExists()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Add(int a, int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int Add(int a, int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Add, 3);
-}
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Add, 3);
+			}
 
-public static class Partially
-{
-	public delegate int Base_1_Delegate(int a, int b);
-	public delegate int Base_1_Apply_1_Delegate(int b);
+			public static class Partially
+			{
+				public delegate int Base_1_Delegate(int a, int b);
+				public delegate int Base_1_Apply_1_Delegate(int b);
 
-	public static Base_1_Apply_1_Delegate Apply(Base_1_Delegate method, int a)
-	{
-		int Base_1_Apply_1_Delegate_Local(int b) => method(a, b);
-		return Base_1_Apply_1_Delegate_Local;
-	}
-}";
+				public static Base_1_Apply_1_Delegate Apply(Base_1_Delegate method, int a)
+				{
+					int Base_1_Apply_1_Delegate_Local(int b) => method(a, b);
+					return Base_1_Apply_1_Delegate_Local;
+				}
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 
 		Assert.Multiple(() =>
@@ -251,15 +271,17 @@ public static class Partially
 	public static void CreateWhenApplyMethodDoesNotExist()
 	{
 		var code =
- @"public static class Maths
-{
-	public static int Add(int a, int b) => a + b;
-}
+			"""
+			public static class Maths
+			{
+				public static int Add(int a, int b) => a + b;
+			}
 
-public static class Runner
-{
-	public static void Run() => Partially.Apply(Maths.Add, 3);
-}";
+			public static class Runner
+			{
+				public static void Run() => Partially.Apply(Maths.Add, 3);
+			}
+			""";
 		var information = PartiallyAppliedInformationTests.GetInformation(code);
 
 		Assert.Multiple(() =>
