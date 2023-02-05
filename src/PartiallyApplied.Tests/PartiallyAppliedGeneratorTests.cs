@@ -396,4 +396,43 @@ public static partial class Partially
 		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
 		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
    }
+
+   [Test]
+   public static async Task GenerateWhenMethodIsSystemActionDelegateTypeAsync()
+   {
+	  var code =
+		   @"using System;
+
+namespace PartiallyTests
+{
+   public class Functions
+   {
+      public static void PrintSum(int a, int b) => Console.WriteLine(a + b);
+   }
+
+   public static class Test
+   {
+      public static void Generate()
+      {
+         Action<int, int> func = Functions.PrintSum;
+         var combineWith3 = Partially.Apply(func, 3);
+      }
+   }
+}";
+
+	  var generatedCode =
+		  @"using System;
+
+#nullable enable
+public static partial class Partially
+{
+	public static Action<int> Apply(Action<int, int> method, int arg1) =>
+		new((arg2) => method(arg1, arg2));
+}
+";
+
+	  await TestAssistants.RunAsync(code,
+		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+   }
 }
