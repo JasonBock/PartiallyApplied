@@ -16,7 +16,7 @@ public static class IncorrectApplyArgumentCountDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(IncorrectApplyArgumentCountDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(IncorrectApplyArgumentCountDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(IncorrectApplyArgumentCountDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(IncorrectApplyArgumentCountDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

@@ -16,7 +16,7 @@ public static class TooManyArgumentsDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(TooManyArgumentsDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(TooManyArgumentsDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(TooManyArgumentsDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(TooManyArgumentsDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

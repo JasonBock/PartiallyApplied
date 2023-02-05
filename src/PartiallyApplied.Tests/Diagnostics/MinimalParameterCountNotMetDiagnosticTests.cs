@@ -16,7 +16,7 @@ public static class MinimalParameterCountNotMetDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

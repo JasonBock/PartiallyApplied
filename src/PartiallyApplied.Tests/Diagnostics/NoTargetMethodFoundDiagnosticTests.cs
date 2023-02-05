@@ -16,7 +16,7 @@ public static class NoTargetMethodFoundDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(NoTargetMethodFoundDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(NoTargetMethodFoundDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(NoTargetMethodFoundDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(NoTargetMethodFoundDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

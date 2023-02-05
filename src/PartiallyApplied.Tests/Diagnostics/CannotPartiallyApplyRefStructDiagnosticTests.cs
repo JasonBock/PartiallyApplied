@@ -16,7 +16,7 @@ public static class CannotPartiallyApplyRefStructDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

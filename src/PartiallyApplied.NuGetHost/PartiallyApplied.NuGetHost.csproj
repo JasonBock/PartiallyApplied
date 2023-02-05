@@ -1,8 +1,0 @@
-<Project Sdk="Microsoft.NET.Sdk">
-	<PropertyGroup>
-		<OutputType>Exe</OutputType>
-	</PropertyGroup>
-	<ItemGroup>
-		<PackageReference Include="PartiallyApplied" Version="1.2.0" />
-	</ItemGroup>
-</Project>

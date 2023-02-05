@@ -43,8 +43,10 @@ public sealed class PartiallyAppliedBuilder
 		writer.Indent--;
 		writer.WriteLine("}");
 
+#pragma warning disable RS1035 // Do not use APIs banned for analyzers
 		return string.Join(Environment.NewLine,
 			string.Join(Environment.NewLine, gatherer.Values.Select(_ => $"using {_};")), string.Empty, "#nullable enable", textWriter.ToString());
+#pragma warning restore RS1035 // Do not use APIs banned for analyzers
 	}
 
 	public SourceText Code { get; private set; }

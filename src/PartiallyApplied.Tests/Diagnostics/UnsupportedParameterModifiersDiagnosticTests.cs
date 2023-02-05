@@ -16,7 +16,7 @@ public static class UnsupportedParameterModifiersDiagnosticTests
 
 		Assert.Multiple(() =>
 		{
-			Assert.That(diagnostic.GetMessage(), Is.EqualTo(UnsupportedParameterModifiersDiagnostic.Message));
+			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(UnsupportedParameterModifiersDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(UnsupportedParameterModifiersDiagnostic.Title));
 			Assert.That(diagnostic.Id, Is.EqualTo(UnsupportedParameterModifiersDiagnostic.Id));
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));

@@ -4,12 +4,14 @@
 		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
 		<Description>A way to do partial function application in C#</Description>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeSymbols>true</IncludeSymbols>
 		<PackageId>PartiallyApplied</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jasonbock/partiallyapplied</PackageProjectUrl>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+		<PackageTags>partially applied function;source generator</PackageTags>
 		<PackageVersion>$(Version)</PackageVersion>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
 		<RepositoryUrl>https://github.com/jasonbock/partiallyapplied</RepositoryUrl>
@@ -17,26 +19,17 @@
 		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
 		<TargetFramework>netstandard2.0</TargetFramework>
 	</PropertyGroup>
-	<PropertyGroup>
-		<RestoreAdditionalProjectSources>https://pkgs.dev.azure.com/dnceng/public/_packaging/dotnet5/nuget/v3/index.json ;$(RestoreAdditionalProjectSources)</RestoreAdditionalProjectSources>
-	</PropertyGroup>
 	<ItemGroup>
-	  <Compile Remove="bin\**" />
-	  <EmbeddedResource Remove="bin\**" />
-	  <None Remove="bin\**" />
-	</ItemGroup>
-	<ItemGroup>
-		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.3" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.0.1" />
+		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.4.0" />
 		<PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1" PrivateAssets="All" />
-		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="6.0.0">
+		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers" Version="7.0.0">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
 		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-		<None Remove="bin\Release\netstandard2.0\\PartiallyApplied.dll" />
 		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
 	</ItemGroup>
 </Project>
