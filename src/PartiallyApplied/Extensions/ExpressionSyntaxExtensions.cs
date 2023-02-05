@@ -1,5 +1,5 @@
-﻿using Microsoft.CodeAnalysis.CSharp.Syntax;
-using Microsoft.CodeAnalysis;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.CSharp.Syntax;
 using System.Collections.Immutable;
 
 namespace PartiallyApplied.Extensions;
@@ -15,6 +15,10 @@ internal static class ExpressionSyntaxExtensions
 		if (symbol.Symbol is IMethodSymbol methodSymbol)
 		{
 			symbols.Add((methodSymbol, true));
+		}
+		else if (model.GetTypeInfo(self).Type is INamedTypeSymbol { TypeKind: TypeKind.Delegate, DelegateInvokeMethod: { } delegateMethodSymbol })
+		{
+			symbols.Add((delegateMethodSymbol, false));
 		}
 		else if (symbol.CandidateSymbols.Length > 0)
 		{
