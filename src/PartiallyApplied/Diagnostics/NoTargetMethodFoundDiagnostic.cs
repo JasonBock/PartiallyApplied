@@ -13,6 +13,6 @@ internal static class NoTargetMethodFoundDiagnostic
 			node.GetLocation());
 
 	internal const string Id = "PA3";
-	internal const string Message = "The first argument count not be resolved as a method reference";
+	internal const string Message = "The first argument could not be resolved as a method reference";
 	internal const string Title = "No Target Method Found";
 }
