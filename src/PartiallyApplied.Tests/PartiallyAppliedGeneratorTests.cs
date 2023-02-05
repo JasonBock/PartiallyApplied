@@ -9,14 +9,14 @@ namespace PartiallyApplied.Tests;
 [NonParallelizable]
 public static class PartiallyAppliedGeneratorTests
 {
-   [SetUp]
-   public static void SetUp() => CustomDelegateBuilder.id = 0;
+	[SetUp]
+	public static void SetUp() => CustomDelegateBuilder.id = 0;
 
-   [Test]
-   public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
-   {
-	  var code =
-@"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -32,8 +32,8 @@ public static class PartiallyAppliedGeneratorTests
 	}
 }";
 
-	  var generatedCode =
-@"using PartiallyTests;
+		var generatedCode =
+ @"using PartiallyTests;
 using System;
 
 #nullable enable
@@ -44,16 +44,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenGenericsExistForNonStandardMethodAsync()
-   {
-	  var code =
-@"using System;
+	[Test]
+	public static async Task GenerateWhenGenericsExistForNonStandardMethodAsync()
+	{
+		var code =
+ @"using System;
 
 namespace PartiallyTests
 {
@@ -71,8 +71,8 @@ namespace PartiallyTests
 	}
 }";
 
-	  var generatedCode =
-@"using PartiallyTests;
+		var generatedCode =
+ @"using PartiallyTests;
 using System;
 
 #nullable enable
@@ -85,16 +85,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateUsingApplyRefReturnAsync()
-   {
-	  var code =
-@"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateUsingApplyRefReturnAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -116,8 +116,8 @@ public static partial class Partially
 	}
 }";
 
-	  var generatedCode =
-@"using System;
+		var generatedCode =
+ @"using System;
 
 #nullable enable
 public static partial class Partially
@@ -129,16 +129,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateUsingApplyRefReadonlyReturnAsync()
-   {
-	  var code =
-@"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateUsingApplyRefReadonlyReturnAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -160,8 +160,8 @@ public static partial class Partially
 	}
 }";
 
-	  var generatedCode =
-@"using System;
+		var generatedCode =
+ @"using System;
 
 #nullable enable
 public static partial class Partially
@@ -173,16 +173,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenInvocationDoesNotExistAsync()
-   {
-	  var code =
-@"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateWhenInvocationDoesNotExistAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -198,8 +198,8 @@ public static partial class Partially
 	}
 }";
 
-	  var generatedCode =
-@"using System;
+		var generatedCode =
+ @"using System;
 
 #nullable enable
 public static partial class Partially
@@ -209,16 +209,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenInvocationExistsAsync()
-   {
-	  var code =
-@"using System;
+	[Test]
+	public static async Task GenerateWhenInvocationExistsAsync()
+	{
+		var code =
+ @"using System;
 
 namespace PartiallyTests
 {
@@ -242,16 +242,16 @@ public static partial class Partially
 		new((b) => method(a, b));
 }";
 
-	  await TestAssistants.RunAsync(code,
-		  Array.Empty<(Type, string, string)>(),
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			Array.Empty<(Type, string, string)>(),
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenDuplicatesExistAsync()
-   {
-	  var code =
-@"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateWhenDuplicatesExistAsync()
+	{
+		var code =
+ @"namespace PartiallyTests
 {
 	public static class Maths
 	{
@@ -269,8 +269,8 @@ public static partial class Partially
 	}
 }";
 
-	  var generatedCode =
-@"using System;
+		var generatedCode =
+ @"using System;
 
 #nullable enable
 public static partial class Partially
@@ -280,16 +280,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenOverloadsExistAsync()
-   {
-	  var code =
-@"using System;
+	[Test]
+	public static async Task GenerateWhenOverloadsExistAsync()
+	{
+		var code =
+ @"using System;
 
 namespace PartiallyTests
 {
@@ -308,8 +308,8 @@ namespace PartiallyTests
 	}
 }";
 
-	  var generatedCode =
-@"using System;
+		var generatedCode =
+ @"using System;
 
 #nullable enable
 public static partial class Partially
@@ -321,16 +321,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenAnonymousMethodExistsAsync()
-   {
-	  var code =
-		  @"namespace PartiallyTests
+	[Test]
+	public static async Task GenerateWhenAnonymousMethodExistsAsync()
+	{
+		var code =
+			@"namespace PartiallyTests
 {
 	public static class Test
 	{
@@ -342,8 +342,8 @@ public static partial class Partially
 	}
 }";
 
-	  var generatedCode =
-		  @"using System;
+		var generatedCode =
+			@"using System;
 
 #nullable enable
 public static partial class Partially
@@ -353,16 +353,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenMethodIsSystemDelegateTypeAsync()
-   {
-	  var code =
-		  @"using System;
+	[Test]
+	public static async Task GenerateWhenMethodIsSystemDelegateTypeAsync()
+	{
+		var code =
+			@"using System;
 
 namespace PartiallyTests
 {
@@ -381,8 +381,8 @@ namespace PartiallyTests
    }
 }";
 
-	  var generatedCode =
-		  @"using System;
+		var generatedCode =
+			@"using System;
 
 #nullable enable
 public static partial class Partially
@@ -392,16 +392,16 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 
-   [Test]
-   public static async Task GenerateWhenMethodIsSystemActionDelegateTypeAsync()
-   {
-	  var code =
-		   @"using System;
+	[Test]
+	public static async Task GenerateWhenMethodIsSystemActionDelegateTypeAsync()
+	{
+		var code =
+			 @"using System;
 
 namespace PartiallyTests
 {
@@ -420,8 +420,8 @@ namespace PartiallyTests
    }
 }";
 
-	  var generatedCode =
-		  @"using System;
+		var generatedCode =
+			@"using System;
 
 #nullable enable
 public static partial class Partially
@@ -431,8 +431,8 @@ public static partial class Partially
 }
 ";
 
-	  await TestAssistants.RunAsync(code,
-		  new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-		  Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
-   }
+		await TestAssistants.RunAsync(code,
+			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
+			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+	}
 }
