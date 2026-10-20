@@ -23,15 +23,8 @@ public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementa
 		public Test() =>
 			this.SolutionTransforms.Add((solution, projectId) =>
 			{
-				if (solution is null)
-				{
-					throw new ArgumentNullException(nameof(solution));
-				}
-
-				if (projectId is null)
-				{
-					throw new ArgumentNullException(nameof(projectId));
-				}
+				ArgumentNullException.ThrowIfNull(solution);
+				ArgumentNullException.ThrowIfNull(projectId);
 
 				var compilationOptions = solution.GetProject(projectId)!.CompilationOptions!;
 				compilationOptions = compilationOptions.WithSpecificDiagnosticOptions(
@@ -66,7 +59,7 @@ public static partial class CSharpIncrementalSourceGeneratorVerifier<TIncrementa
 
 		static ImmutableDictionary<string, ReportDiagnostic> GetNullableWarningsFromCompiler()
 		{
-			string[] args = { "/warnaserror:nullable" };
+			string[] args = ["/warnaserror:nullable"];
 			var commandLineArguments = CSharpCommandLineParser.Default.Parse(
 				args, baseDirectory: Environment.CurrentDirectory, sdkDirectory: Environment.CurrentDirectory);
 			return commandLineArguments.CompilationOptions.SpecificDiagnosticOptions;

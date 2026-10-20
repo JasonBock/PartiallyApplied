@@ -80,7 +80,7 @@ public static class NonStandardMethodTests
 	public static void ApplyWithRefStructParameter()
 	{
 		var doesBufferContain3 = Partially.Apply(NonStandardMethods.Contains, 3);
-		var buffer = new Span<int>(new[] { 3 });
+		var buffer = new Span<int>([3]);
 		Assert.That(doesBufferContain3(buffer), Is.True);
 	}
 

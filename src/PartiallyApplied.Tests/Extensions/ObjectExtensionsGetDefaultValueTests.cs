@@ -11,7 +11,7 @@ public static class ObjectExtensionsGetDefaultValueTests
 		""")]
 	[TestCase(true, "true")]
 	[TestCase(false, "false")]
-	[TestCase(null, "null")]
+	[TestCase(null!, "null")]
 	public static void GetDefaultValue(object value, string expectedResult) =>
 		Assert.That(value.GetDefaultValue(), Is.EqualTo(expectedResult));
 }

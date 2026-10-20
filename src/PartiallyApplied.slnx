@@ -1,0 +1,10 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="../changelog.md" />
+    <File Path=".editorconfig" />
+    <File Path="Directory.Build.props" />
+  </Folder>
+  <Project Path="PartiallyApplied.IntegrationTests/PartiallyApplied.IntegrationTests.csproj" />
+  <Project Path="PartiallyApplied.Tests/PartiallyApplied.Tests.csproj" />
+  <Project Path="PartiallyApplied/PartiallyApplied.csproj" />
+</Solution>
