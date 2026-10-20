@@ -8,7 +8,7 @@ internal static class ImmutableHashSetBuilderExtensions
 	{
 		foreach (var value in values)
 		{
-			self.Add(value);
+			_ = self.Add(value);
 		}
 	}
 }

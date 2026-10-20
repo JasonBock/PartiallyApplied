@@ -12,6 +12,6 @@ public static class ImmutableHashSetBuilderExtensionsAddRangeTests
 		var builder = ImmutableHashSet.CreateBuilder<int>();
 		builder.AddRange(Enumerable.Range(0, 3));
 
-		Assert.That(builder.Count, Is.EqualTo(3));
+		Assert.That(builder, Has.Count.EqualTo(3));
 	}
 }

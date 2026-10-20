@@ -76,8 +76,8 @@ public sealed class PartiallyAppliedInformation
 			}
 		}
 
-		this.Diagnostics = diagnostics.ToImmutableArray();
-		this.Results = results.ToImmutableArray();
+		this.Diagnostics = [.. diagnostics];
+		this.Results = [.. results];
 	}
 
 	public ImmutableArray<Diagnostic> Diagnostics { get; private set; }

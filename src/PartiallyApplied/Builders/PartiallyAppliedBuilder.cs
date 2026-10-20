@@ -61,12 +61,7 @@ public sealed class PartiallyAppliedBuilder
 
 		public bool Equals(IMethodSymbol x, IMethodSymbol y) => x.AreEqual(y);
 
-		// TODO: I don't know why RS1024 is firing here. There are GitHub issues 
-		// related to this that say this is "fixed", but ... I have no idea
-		// why this is firing here.
-#pragma warning disable RS1024 // Symbols should be compared for equality
 		public int GetHashCode(IMethodSymbol obj) => obj.GetHashCode();
-#pragma warning restore RS1024 // Symbols should be compared for equality
 
 		public static IMethodSymbolEqualityComparer Default { get; } = IMethodSymbolEqualityComparer.defaultValue.Value;
 	}

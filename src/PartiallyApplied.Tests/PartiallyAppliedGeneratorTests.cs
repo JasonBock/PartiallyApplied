@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis.Testing;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using PartiallyApplied.Builders;
 
 namespace PartiallyApplied.Tests;
@@ -48,9 +47,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -93,9 +92,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -141,9 +140,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -189,9 +188,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -229,9 +228,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -264,9 +263,9 @@ public static class PartiallyAppliedGeneratorTests
 			}
 			""";
 
-		await TestAssistants.RunAsync(code,
-			Array.Empty<(Type, string, string)>(),
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[],
+			[]);
 	}
 
 	[Test]
@@ -306,9 +305,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -351,9 +350,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -387,9 +386,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -430,9 +429,9 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 
 	[Test]
@@ -473,8 +472,8 @@ public static class PartiallyAppliedGeneratorTests
 
 			""";
 
-		await TestAssistants.RunAsync(code,
-			new[] { (typeof(PartiallyAppliedGenerator), Shared.GeneratedFileName, generatedCode) },
-			Enumerable.Empty<DiagnosticResult>()).ConfigureAwait(false);
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
 	}
 }

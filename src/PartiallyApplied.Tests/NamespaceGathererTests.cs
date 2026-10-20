@@ -16,11 +16,11 @@ public static class NamespaceGathererTests
 
 		var namespaces = gatherer.Values;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(namespaces.Count, Is.EqualTo(1));
+			Assert.That(namespaces, Has.Count.EqualTo(1));
 			Assert.That(namespaces, Contains.Item(listType.Namespace));
-		});
+		}
 	}
 
 	[Test]
@@ -35,11 +35,11 @@ public static class NamespaceGathererTests
 
 		var namespaces = gatherer.Values;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(namespaces.Count, Is.EqualTo(1));
+			Assert.That(namespaces, Has.Count.EqualTo(1));
 			Assert.That(namespaces, Contains.Item(namespaceValue));
-		});
+		}
 	}
 
 	[Test]
@@ -55,11 +55,11 @@ public static class NamespaceGathererTests
 
 		var namespaces = gatherer.Values;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(namespaces.Count, Is.EqualTo(1));
+			Assert.That(namespaces, Has.Count.EqualTo(1));
 			Assert.That(namespaces, Contains.Item(namespaceValue));
-		});
+		}
 	}
 
 	[Test]
@@ -74,16 +74,16 @@ public static class NamespaceGathererTests
 		var namespace2 = NamespaceGathererTests.GetNamespaceSymbol(code2);
 
 		var gatherer = new NamespaceGatherer();
-		gatherer.AddRange(new[] { namespace1, namespace2 });
+		gatherer.AddRange([namespace1, namespace2]);
 
 		var namespaces = gatherer.Values;
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
-			Assert.That(namespaces.Count, Is.EqualTo(2));
+			Assert.That(namespaces, Has.Count.EqualTo(2));
 			Assert.That(namespaces, Contains.Item(namespaceValue1));
 			Assert.That(namespaces, Contains.Item(namespaceValue2));
-		});
+		}
 	}
 
 	private static INamespaceSymbol GetNamespaceSymbol(string source)
@@ -92,7 +92,7 @@ public static class NamespaceGathererTests
 		var references = AppDomain.CurrentDomain.GetAssemblies()
 			.Where(_ => !_.IsDynamic && !string.IsNullOrWhiteSpace(_.Location))
 			.Select(_ => MetadataReference.CreateFromFile(_.Location));
-		var compilation = CSharpCompilation.Create("generator", new SyntaxTree[] { syntaxTree },
+		var compilation = CSharpCompilation.Create("generator", [syntaxTree],
 			references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 		var model = compilation.GetSemanticModel(syntaxTree, true);
 

@@ -15,12 +15,12 @@ public static class PartiallyAppliedInformationResultTests
 			$"public class Target {{ public void {methodName}() {{ }} }}", methodName);
 		var result = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyMethodName);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(result.ApplyName, Is.EqualTo(Naming.ApplyMethodName));
 			Assert.That(result.Target, Is.SameAs(symbol));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(2));
-		});
+		}
 	}
 
 	[Test]
@@ -39,7 +39,7 @@ public static class PartiallyAppliedInformationResultTests
 		var resultB = new PartiallyAppliedInformationResult(symbolB, 2, Naming.ApplyMethodName);
 		var resultC = new PartiallyAppliedInformationResult(symbolC, 2, Naming.ApplyMethodName);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
 			Assert.That(resultA == resultB, Is.False, "resultA == resultB");
@@ -55,7 +55,7 @@ public static class PartiallyAppliedInformationResultTests
 			Assert.That(resultB == resultC, Is.False, "resultB == resultC");
 			Assert.That(resultB != resultC, Is.True, "resultB != resultC");
 			Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
-		});
+		}
 	}
 
 	[Test]
@@ -68,7 +68,7 @@ public static class PartiallyAppliedInformationResultTests
 		var resultB = new PartiallyAppliedInformationResult(symbol, 3, Naming.ApplyMethodName);
 		var resultC = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyMethodName);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
 			Assert.That(resultA == resultB, Is.False, "resultA == resultB");
@@ -84,7 +84,7 @@ public static class PartiallyAppliedInformationResultTests
 			Assert.That(resultB == resultC, Is.False, "resultB == resultC");
 			Assert.That(resultB != resultC, Is.True, "resultB != resultC");
 			Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
-		});
+		}
 	}
 
 	[Test]
@@ -97,7 +97,7 @@ public static class PartiallyAppliedInformationResultTests
 		var resultB = new PartiallyAppliedInformationResult(symbol, 2, $"{Naming.ApplyMethodName}WithRefReturn");
 		var resultC = new PartiallyAppliedInformationResult(symbol, 2, Naming.ApplyMethodName);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(resultA, Is.Not.EqualTo(resultB), "resultA.Equals(resultB)");
 			Assert.That(resultA == resultB, Is.False, "resultA == resultB");
@@ -113,7 +113,7 @@ public static class PartiallyAppliedInformationResultTests
 			Assert.That(resultB == resultC, Is.False, "resultB == resultC");
 			Assert.That(resultB != resultC, Is.True, "resultB != resultC");
 			Assert.That(resultB.GetHashCode(), Is.Not.EqualTo(resultC.GetHashCode()), "resultB.GetHashCode() == resultC.GetHashCode()");
-		});
+		}
 	}
 
 	private static IMethodSymbol GetMethodSymbol(string source, string methodName)
@@ -122,7 +122,7 @@ public static class PartiallyAppliedInformationResultTests
 		var references = AppDomain.CurrentDomain.GetAssemblies()
 			.Where(_ => !_.IsDynamic && !string.IsNullOrWhiteSpace(_.Location))
 			.Select(_ => MetadataReference.CreateFromFile(_.Location));
-		var compilation = CSharpCompilation.Create("generator", new SyntaxTree[] { syntaxTree },
+		var compilation = CSharpCompilation.Create("generator", [syntaxTree],
 			references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 		var model = compilation.GetSemanticModel(syntaxTree, true);
 

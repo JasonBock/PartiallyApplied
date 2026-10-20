@@ -16,7 +16,7 @@ internal sealed class NamespaceGatherer
 	{
 		if (!@namespace.IsGlobalNamespace)
 		{
-			this.builder.Add(@namespace.GetName());
+			_ = this.builder.Add(@namespace.GetName());
 		}
 	}
 
@@ -24,7 +24,7 @@ internal sealed class NamespaceGatherer
 	{
 		if (!string.IsNullOrWhiteSpace(type.Namespace))
 		{
-			this.builder.Add(type.Namespace);
+			_ = this.builder.Add(type.Namespace);
 		}
 	}
 

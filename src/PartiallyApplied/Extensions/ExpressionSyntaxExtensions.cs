@@ -35,6 +35,6 @@ internal static class ExpressionSyntaxExtensions
 			symbols.Add((null, false));
 		}
 
-		return symbols.ToImmutableArray();
+		return [.. symbols];
 	}
 }

@@ -57,14 +57,14 @@ public sealed class PartiallyAppliedGenerator
 				{
 					foreach (var result in information.Results)
 					{
-						results.Add(result);
+						_ = results.Add(result);
 					}
 				}
 			}
 
 			if (results.Count > 0)
 			{
-				var builder = new PartiallyAppliedBuilder(results.ToImmutableHashSet());
+				var builder = new PartiallyAppliedBuilder([.. results]);
 				context.AddSource(Shared.GeneratedFileName, builder.Code);
 			}
 		}

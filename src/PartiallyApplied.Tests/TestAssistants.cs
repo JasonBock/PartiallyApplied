@@ -1,31 +1,66 @@
-﻿using Microsoft.CodeAnalysis.Testing;
+﻿using Microsoft.CodeAnalysis;
+using Microsoft.CodeAnalysis.Testing;
+using NuGet.Frameworks;
 
 namespace PartiallyApplied.Tests;
 
-using GeneratorTest = CSharpIncrementalSourceGeneratorVerifier<PartiallyAppliedGenerator>;
-
 internal static class TestAssistants
 {
-	internal static async Task RunAsync(string code,
-		IEnumerable<(Type, string, string)> generatedSources,
-		IEnumerable<DiagnosticResult> expectedDiagnostics)
+	internal static async Task RunGeneratorAsync<TGenerator>(string code,
+		IEnumerable<(string, string)> generatedSources,
+		IEnumerable<DiagnosticResult> expectedDiagnostics,
+		OutputKind outputKind = OutputKind.DynamicallyLinkedLibrary,
+		IEnumerable<MetadataReference>? additionalReferences = null,
+		ReportDiagnostic generalDiagnosticOption = ReportDiagnostic.Default,
+		List<string>? disabledDiagnostics = null)
+		where TGenerator : IIncrementalGenerator, new()
 	{
-		var test = new GeneratorTest.Test
+		var test = new IncrementalGeneratorTest<TGenerator>(generalDiagnosticOption)
 		{
-			ReferenceAssemblies = ReferenceAssemblies.Net.Net50,
+			ReferenceAssemblies = net10ReferenceAssemblies.Value,
 			TestState =
 			{
 				Sources = { code },
+				OutputKind = outputKind,
 			},
 		};
 
-		foreach (var generatedSource in generatedSources)
+		if (disabledDiagnostics is not null)
 		{
-			test.TestState.GeneratedSources.Add(generatedSource);
+			test.DisabledDiagnostics.AddRange(disabledDiagnostics);
 		}
 
-		test.TestState.AdditionalReferences.Add(typeof(PartiallyAppliedGenerator).Assembly);
+		foreach (var (generatedFileName, generatedCode) in generatedSources)
+		{
+			test.TestState.GeneratedSources.Add((typeof(PartiallyAppliedGenerator), generatedFileName, generatedCode));
+		}
+
+		test.TestState.AdditionalReferences.Add(typeof(TGenerator).Assembly);
+
+		if (additionalReferences is not null)
+		{
+			test.TestState.AdditionalReferences.AddRange(additionalReferences);
+		}
+
 		test.TestState.ExpectedDiagnostics.AddRange(expectedDiagnostics);
-		await test.RunAsync().ConfigureAwait(false);
+		await test.RunAsync();
 	}
+
+	private static readonly Lazy<ReferenceAssemblies> net10ReferenceAssemblies = new(() =>
+	{
+		// Always look here for the latest version of a particular runtime:
+		// https://www.nuget.org/packages/Microsoft.NETCore.App.Ref
+		if (!NuGetFramework.Parse("net10.0").IsPackageBased)
+		{
+			// The NuGet version provided at runtime does not recognize the 'net10.0' target framework
+			throw new NotSupportedException("The 'net10.0' target framework is not supported by this version of NuGet.");
+		}
+
+		return new ReferenceAssemblies(
+			 "net10.0",
+			 new PackageIdentity(
+				  "Microsoft.NETCore.App.Ref",
+				  "10.0.0"),
+			 Path.Combine("ref", "net10.0"));
+	}, LazyThreadSafetyMode.ExecutionAndPublication);
 }

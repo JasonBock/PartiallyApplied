@@ -47,12 +47,12 @@ public static class NonStandardMethodTests
 	public static void ApplyForOptionals()
 	{
 		var addWith3 = Partially.ApplyWithOptionals(NonStandardMethods.AddOptionals, 3);
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(addWith3(), Is.EqualTo(12));
 			Assert.That(addWith3(10), Is.EqualTo(18));
 			Assert.That(addWith3(10, 20), Is.EqualTo(33));
-		});
+		}
 	}
 
 	[Test]

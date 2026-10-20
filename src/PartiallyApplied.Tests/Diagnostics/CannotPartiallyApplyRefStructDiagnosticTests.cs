@@ -14,7 +14,7 @@ public static class CannotPartiallyApplyRefStructDiagnosticTests
 		var node = SyntaxFactory.ClassDeclaration("Hi");
 		var diagnostic = CannotPartiallyApplyRefStructDiagnostic.Create(node);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(CannotPartiallyApplyRefStructDiagnostic.Title));
@@ -22,6 +22,6 @@ public static class CannotPartiallyApplyRefStructDiagnosticTests
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));
 			Assert.That(diagnostic.Descriptor.IsEnabledByDefault, Is.True);
 			Assert.That(diagnostic.Location, Is.EqualTo(node.GetLocation()));
-		});
+		}
 	}
 }

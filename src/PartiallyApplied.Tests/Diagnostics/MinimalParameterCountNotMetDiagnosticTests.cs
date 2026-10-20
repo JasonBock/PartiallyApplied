@@ -14,7 +14,7 @@ public static class MinimalParameterCountNotMetDiagnosticTests
 		var node = SyntaxFactory.ClassDeclaration("Hi");
 		var diagnostic = MinimalParameterCountNotMetDiagnostic.Create(node);
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(diagnostic.GetMessage(CultureInfo.CurrentCulture), Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Message));
 			Assert.That(diagnostic.Descriptor.Title.ToString(CultureInfo.CurrentCulture), Is.EqualTo(MinimalParameterCountNotMetDiagnostic.Title));
@@ -22,6 +22,6 @@ public static class MinimalParameterCountNotMetDiagnosticTests
 			Assert.That(diagnostic.Severity, Is.EqualTo(DiagnosticSeverity.Error));
 			Assert.That(diagnostic.Descriptor.IsEnabledByDefault, Is.True);
 			Assert.That(diagnostic.Location, Is.EqualTo(node.GetLocation()));
-		});
+		}
 	}
 }

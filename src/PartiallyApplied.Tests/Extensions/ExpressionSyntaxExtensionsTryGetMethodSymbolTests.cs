@@ -30,11 +30,11 @@ public static class ExpressionSyntaxExtensionsTryGetMethodSymbolTests
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(method!.Name, Is.EqualTo("Foo"));
 			Assert.That(wasFound, Is.True);
-		});
+		}
 	}
 
 	[Test]
@@ -59,11 +59,11 @@ public static class ExpressionSyntaxExtensionsTryGetMethodSymbolTests
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<InvocationExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(method!.Name, Is.EqualTo("Foo"));
 			Assert.That(wasFound, Is.False);
-		});
+		}
 	}
 
 	[Test]
@@ -88,11 +88,11 @@ public static class ExpressionSyntaxExtensionsTryGetMethodSymbolTests
 		var (expression, model) = ExpressionSyntaxExtensionsTryGetMethodSymbolTests.GetExpression<MemberAccessExpressionSyntax>(code);
 		var (method, wasFound) = expression.TryGetMethodSymbols(model)[0];
 
-		Assert.Multiple(() =>
+		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(method, Is.Null);
 			Assert.That(wasFound, Is.False);
-		});
+		}
 	}
 
 	private static (ExpressionSyntax, SemanticModel) GetExpression<T>(string source)
@@ -102,7 +102,7 @@ public static class ExpressionSyntaxExtensionsTryGetMethodSymbolTests
 		var references = AppDomain.CurrentDomain.GetAssemblies()
 			.Where(_ => !_.IsDynamic && !string.IsNullOrWhiteSpace(_.Location))
 			.Select(_ => MetadataReference.CreateFromFile(_.Location));
-		var compilation = CSharpCompilation.Create("generator", new SyntaxTree[] { syntaxTree },
+		var compilation = CSharpCompilation.Create("generator", [syntaxTree],
 			references, new CSharpCompilationOptions(OutputKind.DynamicallyLinkedLibrary));
 
 		var model = compilation.GetSemanticModel(syntaxTree, true);
