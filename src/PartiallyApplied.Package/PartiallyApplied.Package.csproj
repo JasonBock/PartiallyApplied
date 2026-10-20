@@ -1,34 +1,40 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>PartiallyApplied</AssemblyName>
-		<ContinuousIntegrationBuild>true</ContinuousIntegrationBuild>
-		<DebugType>embedded</DebugType>
 		<Description>A way to do partial function application in C#</Description>
-		<EmbedUntrackedSources>true</EmbedUntrackedSources>
-		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-		<IsRoslynComponent>true</IsRoslynComponent>
+		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<PackageIcon>Icon.png</PackageIcon>
 		<PackageId>PartiallyApplied</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
 		<PackageProjectUrl>https://github.com/jasonbock/partiallyapplied</PackageProjectUrl>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>A changelog is available at https://github.com/JasonBock/PartiallyApplied/blob/main/changelog.md</PackageReleaseNotes>
 		<PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
 		<PackageTags>partially applied function;source generator</PackageTags>
 		<PackageVersion>$(Version)</PackageVersion>
 		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<RepositoryType>git</RepositoryType>
 		<RepositoryUrl>https://github.com/jasonbock/partiallyapplied</RepositoryUrl>
-		<RootNamespace>PartiallyApplied</RootNamespace>
-		<TargetFramework>netstandard2.0</TargetFramework>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.Analyzers" PrivateAssets="all" />
-		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />
+		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" PrivateAssets="all" />
 		<PackageReference Include="Microsoft.CodeAnalysis.NetAnalyzers">
 			<PrivateAssets>all</PrivateAssets>
 			<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
 		</PackageReference>
 	</ItemGroup>
 	<ItemGroup>
-		<None Include="..\..\LICENSE" Pack="true" PackagePath="" />
-		<None Include="$(OutputPath)\$(AssemblyName).dll" Pack="true" PackagePath="analyzers/dotnet/cs" Visible="false" />
+		<None Include="README.md" Pack="true" PackagePath="" />
+		<None Include="../../LICENSE" Pack="true" PackagePath="" />
+		<None Include="../Images/Icon.png" Pack="true" PackagePath="" Visible="false" />
+		<None 
+			Include="../artifacts/bin/PartiallyApplied.Analysis/$(Configuration)/PartiallyApplied.Analysis.dll"
+			Pack="true" 
+			PackagePath="analyzers/dotnet/cs" 
+			Visible="false" />
+	</ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="../PartiallyApplied.Analysis/PartiallyApplied.Analysis.csproj" ReferenceOutputAssembly="false" />
 	</ItemGroup>
 </Project>

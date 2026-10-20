@@ -1,13 +1,13 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
 		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<AssemblyName>PartiallyApplied.IntegrationTests</AssemblyName>
+		<AssemblyName>PartiallyApplied.Analysis.IntegrationTests</AssemblyName>
 		<EnableNUnitRunner>true</EnableNUnitRunner>
-		<RootNamespace>PartiallyApplied.IntegrationTests</RootNamespace>
+		<RootNamespace>PartiallyApplied.Analysis.IntegrationTests</RootNamespace>
 		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\PartiallyApplied\PartiallyApplied.csproj" OutputItemType="Analyzer" />
+		<ProjectReference Include="..\PartiallyApplied.Analysis\PartiallyApplied.Analysis.csproj" OutputItemType="Analyzer" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp" />

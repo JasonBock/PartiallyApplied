@@ -3,8 +3,12 @@
     <File Path="../changelog.md" />
     <File Path=".editorconfig" />
     <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="nuget.config" />
   </Folder>
-  <Project Path="PartiallyApplied.IntegrationTests/PartiallyApplied.IntegrationTests.csproj" />
-  <Project Path="PartiallyApplied.Tests/PartiallyApplied.Tests.csproj" />
-  <Project Path="PartiallyApplied/PartiallyApplied.csproj" />
+  <Project Path="PartiallyApplied.Analysis.IntegrationTests/PartiallyApplied.Analysis.IntegrationTests.csproj" />
+  <Project Path="PartiallyApplied.Analysis.Tests/PartiallyApplied.Analysis.Tests.csproj" />
+  <Project Path="PartiallyApplied.Analysis/PartiallyApplied.Analysis.csproj" />
+  <Project Path="PartiallyApplied.Package/PartiallyApplied.Package.csproj" />
 </Solution>

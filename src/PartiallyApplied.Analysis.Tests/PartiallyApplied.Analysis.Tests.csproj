@@ -1,12 +1,12 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 	<PropertyGroup>
-		<AssemblyName>PartiallyApplied.Tests</AssemblyName>
+		<AssemblyName>PartiallyApplied.Analysis.Tests</AssemblyName>
 		<EnableNUnitRunner>true</EnableNUnitRunner>
-		<RootNamespace>PartiallyApplied.Tests</RootNamespace>
+		<RootNamespace>PartiallyApplied.Analysis.Tests</RootNamespace>
 		<TestingPlatformDotnetTestSupport>true</TestingPlatformDotnetTestSupport>
 	</PropertyGroup>
 	<ItemGroup>
-		<ProjectReference Include="..\PartiallyApplied\PartiallyApplied.csproj" />
+		<ProjectReference Include="..\PartiallyApplied.Analysis\PartiallyApplied.Analysis.csproj" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Microsoft.CodeAnalysis.CSharp.Analyzer.Testing" />

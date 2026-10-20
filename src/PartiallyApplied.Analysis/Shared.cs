@@ -1,6 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("PartiallyApplied.Tests")]
+[assembly: InternalsVisibleTo("PartiallyApplied.Analysis.Tests")]
 
 namespace PartiallyApplied;
 
