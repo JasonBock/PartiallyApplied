@@ -5,7 +5,6 @@
 		<DebugType>embedded</DebugType>
 		<EmbedUntrackedSources>true</EmbedUntrackedSources>
 		<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IsRoslynComponent>true</IsRoslynComponent>
 		<RootNamespace>PartiallyApplied.Analysis</RootNamespace>
 		<TargetFramework>netstandard2.0</TargetFramework>

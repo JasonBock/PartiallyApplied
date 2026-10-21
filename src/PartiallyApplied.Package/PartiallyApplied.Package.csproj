@@ -3,6 +3,7 @@
 		<Description>A way to do partial function application in C#</Description>
 		<GeneratePackageOnBuild>true</GeneratePackageOnBuild>
 		<IncludeBuildOutput>false</IncludeBuildOutput>
+		<NoWarn>$(NoWarn);NU5128</NoWarn>
 		<PackageIcon>Icon.png</PackageIcon>
 		<PackageId>PartiallyApplied</PackageId>
 		<PackageLicenseFile>LICENSE</PackageLicenseFile>
