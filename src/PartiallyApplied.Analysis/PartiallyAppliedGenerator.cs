@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
+using PartiallyApplied.Analysis.Models;
 using PartiallyApplied.Builders;
 using System.Collections.Immutable;
 
@@ -20,13 +21,10 @@ public sealed class PartiallyAppliedGenerator
 				accessIdentifier.Identifier.Text == Naming.PartiallyClassName &&
 				access.Name.Identifier.Text.StartsWith(Naming.ApplyMethodName, StringComparison.InvariantCulture);
 
-		static InvocationExpressionSyntax TransformTargets(GeneratorSyntaxContext context, CancellationToken token) =>
-			// Typically within the transform function for other incremental generators I've written,
-			// I've done further analysis on the invocation node, 
-			// but here, it's "good enough" just to return that node, and then within CreateOutput(),
-			// I'll use PartiallyAppliedInformation to determine all the diagnostic issues with a given
-			// invocation node.
-			(InvocationExpressionSyntax)context.Node;
+		static AppliedInvocationModel TransformTargets(GeneratorSyntaxContext context, CancellationToken token)
+		{
+			return (InvocationExpressionSyntax)context.Node;
+		}
 
 		var provider = context.SyntaxProvider
 			.CreateSyntaxProvider(IsSyntaxTargetForGeneration, TransformTargets);

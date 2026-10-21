@@ -22,6 +22,8 @@ internal static class ExpressionSyntaxExtensions
 		}
 		else if (symbol.CandidateSymbols.Length > 0)
 		{
+			// TODO: Do I ever actually run into more than 1
+			// candidate symbol?
 			foreach (var candidate in symbol.CandidateSymbols)
 			{
 				if (candidate is IMethodSymbol methodFromCandidateSymbol)
