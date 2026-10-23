@@ -1,4 +1,5 @@
 ﻿using Microsoft.CodeAnalysis;
+using PartiallyApplied.Analysis.Models;
 using PartiallyApplied.Extensions;
 using System.CodeDom.Compiler;
 
@@ -8,7 +9,7 @@ internal static class CustomDelegateBuilder
 {
 	internal static int id;
 
-	internal static void Build(PartiallyAppliedInformationResult result,
+	internal static void Build(InvocationModel result,
 		IndentedTextWriter writer, NamespaceGatherer gatherer)
 	{
 		var target = result.Target;

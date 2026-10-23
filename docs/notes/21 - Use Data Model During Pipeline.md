@@ -8,3 +8,5 @@ An `InvocationModel` has three things:
 TODO:
 
 * `ExpressionSyntaxExtensions.TryGetMethodSymbols()` - do I actually have a case where there will be more than 1 candidate symbol? Update tests as well to verify count.
+* `PartiallyAppliedInformationResult` - can probably be just a simple `record`
+* `IMethodSymbolEqualityComparer` - may be able to delete

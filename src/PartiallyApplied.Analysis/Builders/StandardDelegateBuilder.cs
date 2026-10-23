@@ -1,35 +1,40 @@
 ﻿using Microsoft.CodeAnalysis;
-using PartiallyApplied.Extensions;
+using PartiallyApplied.Analysis.Models;
 using System.CodeDom.Compiler;
 
 namespace PartiallyApplied.Builders;
 
 internal static class StandardDelegateBuilder
 {
-	internal static void Build(PartiallyAppliedInformationResult result,
+	internal static void Build(InvocationModel result,
 		IndentedTextWriter writer, NamespaceGatherer gatherer)
 	{
 		var target = result.Target;
-		gatherer.Add(typeof(Action));
+
+		// Need the namespace for typeof(Action)
+		gatherer.Add("System");
 
 		var delegateType = target.ReturnsVoid ? "Action" : "Func";
 
-		var targetDelegateParameters = new List<ITypeSymbol>(
-			target.Parameters.Select(_ =>
+		var targetDelegateParameters = new List<ITypeReferenceModel>(
+			target.Parameters.Select(parameter =>
 			{
-				gatherer.Add(_.Type.ContainingNamespace);
-				return _.Type;
+				if (parameter.Type.Namespace is not null)
+				{
+					gatherer.Add(parameter.Type.Namespace);
+				}
+				return parameter.Type;
 			}));
 
 		if (!target.ReturnsVoid)
 		{
-			gatherer.Add(target.ReturnType.ContainingNamespace);
+			gatherer.Add(target.ReturnType.Namespace);
 			targetDelegateParameters.Add(target.ReturnType);
 		}
 
-		var targetDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Select(_ => _.GetName()))}>";
-		var applyDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Skip(result.PartialArgumentCount).Select(_ => _.GetName()))}>";
-		var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.GetName()} {_.Name}"));
+		var targetDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Select(_ => _.FullyQualifiedName))}>";
+		var applyDelegate = $"{delegateType}<{string.Join(", ", targetDelegateParameters.Skip(result.PartialArgumentCount).Select(_ => _.FullyQualifiedName))}>";
+		var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount).Select(_ => $"{_.Type.FullyQualifiedName} {_.Name}"));
 		var applyOpenGenerics = target.TypeParameters.Length > 0 ?
 			$"<{string.Join(", ", target.TypeParameters.Select(_ => _.Name))}>" : string.Empty;
 		var applyName = $"{result.ApplyName}{applyOpenGenerics}";

@@ -1,5 +1,6 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using PartiallyApplied.Analysis.Models;
 using PartiallyApplied.Extensions;
 using System.CodeDom.Compiler;
 using System.Collections.Immutable;
@@ -7,13 +8,13 @@ using System.Text;
 
 namespace PartiallyApplied.Builders;
 
-public sealed class PartiallyAppliedBuilder
+internal sealed class PartiallyAppliedBuilder
 {
-	private readonly ImmutableHashSet<PartiallyAppliedInformationResult> results;
+	private readonly ImmutableHashSet<InvocationModel> invocations;
 
-	public PartiallyAppliedBuilder(ImmutableHashSet<PartiallyAppliedInformationResult> results)
+	internal PartiallyAppliedBuilder(ImmutableHashSet<InvocationModel> invocations)
 	{
-		this.results = results;
+		this.invocations = invocations;
 		this.Code = SourceText.From(this.Build(), Encoding.UTF8);
 	}
 
@@ -28,9 +29,9 @@ public sealed class PartiallyAppliedBuilder
 		writer.WriteLine("{");
 		writer.Indent++;
 
-		foreach (var result in this.results)
+		foreach (var result in this.invocations)
 		{
-			if (result.Target.IsStandard())
+			if (result.Target.IsStandard)
 			{
 				StandardDelegateBuilder.Build(result, writer, gatherer);
 			}

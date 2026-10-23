@@ -1,6 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using System.Collections.Immutable;
-using PartiallyApplied.Extensions;
+﻿using System.Collections.Immutable;
 
 namespace PartiallyApplied;
 
@@ -9,30 +7,11 @@ internal sealed class NamespaceGatherer
 	private readonly ImmutableHashSet<string>.Builder builder =
 		ImmutableHashSet.CreateBuilder<string>();
 
-	public void Add(string @namespace) =>
-		this.builder.Add(@namespace);
-
-	public void Add(INamespaceSymbol @namespace)
+	public void Add(string? @namespace)
 	{
-		if (!@namespace.IsGlobalNamespace)
+		if (@namespace is not null)
 		{
-			_ = this.builder.Add(@namespace.GetName());
-		}
-	}
-
-	public void Add(Type type)
-	{
-		if (!string.IsNullOrWhiteSpace(type.Namespace))
-		{
-			_ = this.builder.Add(type.Namespace);
-		}
-	}
-
-	public void AddRange(IEnumerable<INamespaceSymbol> namespaces)
-	{
-		foreach (var @namespace in namespaces)
-		{
-			this.Add(@namespace);
+			_ = this.builder.Add(@namespace);
 		}
 	}
 

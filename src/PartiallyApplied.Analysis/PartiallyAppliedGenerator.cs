@@ -21,13 +21,18 @@ public sealed class PartiallyAppliedGenerator
 				accessIdentifier.Identifier.Text == Naming.PartiallyClassName &&
 				access.Name.Identifier.Text.StartsWith(Naming.ApplyMethodName, StringComparison.InvariantCulture);
 
-		static AppliedInvocationModel TransformTargets(GeneratorSyntaxContext context, CancellationToken token)
+		static List<AppliedInvocationModel> TransformTargets(GeneratorSyntaxContext context, CancellationToken token)
 		{
-			return (InvocationExpressionSyntax)context.Node;
+			var model = AppliedInvocationModel.Create((InvocationExpressionSyntax)context.Node, context.SemanticModel);
+
+			return model.Diagnostics.IsEmpty ?
+				[model] :
+				[];
 		}
 
 		var provider = context.SyntaxProvider
-			.CreateSyntaxProvider(IsSyntaxTargetForGeneration, TransformTargets);
+			.CreateSyntaxProvider(IsSyntaxTargetForGeneration, TransformTargets)
+			.SelectMany((models, _) => models);
 		var output = context.CompilationProvider.Combine(provider.Collect());
 
 		context.RegisterSourceOutput(output,
@@ -35,34 +40,33 @@ public sealed class PartiallyAppliedGenerator
 	}
 
 	private static void CreateOutput(Compilation compilation,
-		ImmutableArray<InvocationExpressionSyntax> targets, SourceProductionContext context)
+		ImmutableArray<AppliedInvocationModel> targets, SourceProductionContext context)
 	{
 		if (targets.Length > 0)
 		{
-			var results = new HashSet<PartiallyAppliedInformationResult>();
+			var invocations = new HashSet<InvocationModel>();
 
 			foreach (var target in targets.Distinct())
 			{
-				var information = new PartiallyAppliedInformation(target, compilation);
-
-				foreach (var diagnostic in information.Diagnostics)
+				// TODO: This will change with https://github.com/JasonBock/PartiallyApplied/issues/25
+				foreach (var diagnostic in target.Diagnostics)
 				{
 					context.ReportDiagnostic(diagnostic);
 				}
 
-				if (!information.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
-					information.Results.Length > 0)
+				if (!target.Diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error) &&
+					target.Invocations.Length > 0)
 				{
-					foreach (var result in information.Results)
+					foreach (var invocation in target.Invocations)
 					{
-						_ = results.Add(result);
+						_ = invocations.Add(invocation);
 					}
 				}
 			}
 
-			if (results.Count > 0)
+			if (invocations.Count > 0)
 			{
-				var builder = new PartiallyAppliedBuilder([.. results]);
+				var builder = new PartiallyAppliedBuilder([.. invocations]);
 				context.AddSource(Shared.GeneratedFileName, builder.Code);
 			}
 		}

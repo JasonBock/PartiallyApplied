@@ -5,15 +5,16 @@ using PartiallyApplied.Extensions;
 
 namespace PartiallyApplied.Analysis.Models;
 
-internal sealed class AppliedInvocationModel
+internal sealed record AppliedInvocationModel
 {
-	private AppliedInvocationModel(MethodModel? methodModel, EquatableArray<Diagnostic> diagnostics) =>
-		(this.Invocation, this.Diagnostics) = (methodModel, diagnostics);
+	private AppliedInvocationModel(EquatableArray<InvocationModel> methods, EquatableArray<Diagnostic> diagnostics) =>
+		(this.Invocations, this.Diagnostics) = (methods, diagnostics);
 
 	internal static AppliedInvocationModel Create(InvocationExpressionSyntax invocationExpression, SemanticModel semanticModel)
 	{
 		var diagnostics = new List<Diagnostic>();
 		var results = new List<PartiallyAppliedInformationResult>();
+		var typeReferenceModelContext = new TypeReferenceModelContext(semanticModel);
 
 		if (invocationExpression.ArgumentList.Arguments.Count < 2)
 		{
@@ -67,9 +68,17 @@ internal sealed class AppliedInvocationModel
 				}
 			}
 		}
+
+		var canGenerate = !diagnostics.Any(_ => _.Severity == DiagnosticSeverity.Error);
+
+		return canGenerate ?
+			new AppliedInvocationModel(
+				[.. results.Select(result => new InvocationModel(result.ApplyName, result.PartialArgumentCount, new MethodModel(result.Target)))], []) :
+			new AppliedInvocationModel(
+				[], [.. diagnostics]);
 	}
 
-	internal MethodModel? Invocation { get; }
+	internal EquatableArray<InvocationModel> Invocations { get; }
 
 	internal EquatableArray<Diagnostic> Diagnostics { get; }
 }
