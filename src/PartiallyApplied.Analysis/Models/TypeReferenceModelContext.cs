@@ -40,6 +40,7 @@ internal sealed class TypeReferenceModelContext
 					null;
 			this.Name = type.Name;
 			this.FullyQualifiedName = type.GetFullyQualifiedName(modelContext.SemanticModel.Compilation);
+			this.SymbolKind = type.Kind;
 		}
 
 		public override string ToString() => this.FullyQualifiedName;
@@ -55,5 +56,6 @@ internal sealed class TypeReferenceModelContext
 		public string FullyQualifiedName { get; }
 		public string Name { get; }
 		public string? Namespace { get; }
+		public SymbolKind SymbolKind { get; }
 	}
 }

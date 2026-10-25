@@ -2,12 +2,13 @@
 using Microsoft.CodeAnalysis.CSharp;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using NUnit.Framework;
+using PartiallyApplied.Analysis.Models;
 using PartiallyApplied.Diagnostics;
 using System.Collections.Immutable;
 
 namespace PartiallyApplied.Tests;
 
-public static class PartiallyAppliedInformationTests
+internal static class AppliedInvocationModelTests
 {
 	[Test]
 	public static void CreateWhenTargetHasRefParameters()
@@ -24,11 +25,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.AddByRef, 3);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -47,11 +50,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.AddByOut, 2);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -70,11 +75,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.AddByIn, 3);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == UnsupportedParameterModifiersDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -99,11 +106,13 @@ public static class PartiallyAppliedInformationTests
 				}
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == CannotPartiallyApplyRefStructDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -128,12 +137,14 @@ public static class PartiallyAppliedInformationTests
 				}
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics, Is.Empty);
-			Assert.That(information.Results, Is.Not.Empty);
-			var result = information.Results[0];
+			Assert.That(information.Invocations, Is.Not.Empty);
+			var result = information.Invocations[0];
 			Assert.That(result.Target.Name, Is.EqualTo("Contains"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		}
@@ -154,11 +165,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.Add);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == IncorrectApplyArgumentCountDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -177,11 +190,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.Subtract, 3);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == NoTargetMethodFoundDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -200,11 +215,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.Reflect, 3);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == MinimalParameterCountNotMetDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -223,11 +240,13 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.Add, 3, 4);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
+
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics.Any(_ => _.Id == TooManyArgumentsDiagnostic.Id), Is.True);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -258,12 +277,13 @@ public static class PartiallyAppliedInformationTests
 				}
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
 
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics, Is.Empty);
-			Assert.That(information.Results, Is.Empty);
+			Assert.That(information.Invocations, Is.Empty);
 		}
 	}
 
@@ -282,19 +302,20 @@ public static class PartiallyAppliedInformationTests
 				public static void Run() => Partially.Apply(Maths.Add, 3);
 			}
 			""";
-		var information = PartiallyAppliedInformationTests.GetInformation(code);
+
+		var information = AppliedInvocationModelTests.GetInformation(code);
 
 		using (Assert.EnterMultipleScope())
 		{
 			Assert.That(information.Diagnostics, Is.Empty);
-			Assert.That(information.Results, Is.Not.Empty);
-			var result = information.Results[0];
+			Assert.That(information.Invocations, Is.Not.Empty);
+			var result = information.Invocations[0];
 			Assert.That(result.Target.Name, Is.EqualTo("Add"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		}
 	}
 
-	private static PartiallyAppliedInformation GetInformation(string source)
+	private static AppliedInvocationModel GetInformation(string source)
 	{
 		var syntaxTree = CSharpSyntaxTree.ParseText(source);
 		var references = AppDomain.CurrentDomain.GetAssemblies()
@@ -311,6 +332,6 @@ public static class PartiallyAppliedInformationTests
 					accessIdentifier.Identifier.Text == Naming.PartiallyClassName &&
 					access.Name is IdentifierNameSyntax accessName &&
 					accessName.Identifier.Text == Naming.ApplyMethodName);
-		return new PartiallyAppliedInformation(invocationSyntax, compilation);
+		return AppliedInvocationModel.Create(invocationSyntax, compilation.GetSemanticModel(syntaxTree, false));
 	}
 }

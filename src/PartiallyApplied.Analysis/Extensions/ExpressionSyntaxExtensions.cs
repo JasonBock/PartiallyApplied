@@ -6,37 +6,40 @@ namespace PartiallyApplied.Extensions;
 
 internal static class ExpressionSyntaxExtensions
 {
-	internal static ImmutableArray<(IMethodSymbol?, bool)> TryGetMethodSymbols(this ExpressionSyntax self, SemanticModel model)
+	extension(ExpressionSyntax self)
 	{
-		var symbols = new List<(IMethodSymbol?, bool)>();
+		internal ImmutableArray<(IMethodSymbol?, bool)> TryGetMethodSymbols(SemanticModel model)
+		{
+			var symbols = new List<(IMethodSymbol?, bool)>();
 
-		var symbol = model.GetSymbolInfo(self);
+			var symbol = model.GetSymbolInfo(self);
 
-		if (symbol.Symbol is IMethodSymbol methodSymbol)
-		{
-			symbols.Add((methodSymbol, true));
-		}
-		else if (model.GetTypeInfo(self).Type is INamedTypeSymbol { TypeKind: TypeKind.Delegate, DelegateInvokeMethod: { } delegateMethodSymbol })
-		{
-			symbols.Add((delegateMethodSymbol, false));
-		}
-		else if (symbol.CandidateSymbols.Length > 0)
-		{
-			// TODO: Do I ever actually run into more than 1
-			// candidate symbol?
-			foreach (var candidate in symbol.CandidateSymbols)
+			if (symbol.Symbol is IMethodSymbol methodSymbol)
 			{
-				if (candidate is IMethodSymbol methodFromCandidateSymbol)
+				symbols.Add((methodSymbol, true));
+			}
+			else if (model.GetTypeInfo(self).Type is INamedTypeSymbol { TypeKind: TypeKind.Delegate, DelegateInvokeMethod: { } delegateMethodSymbol })
+			{
+				symbols.Add((delegateMethodSymbol, false));
+			}
+			else if (symbol.CandidateSymbols.Length > 0)
+			{
+				// TODO: Do I ever actually run into more than 1
+				// candidate symbol?
+				foreach (var candidate in symbol.CandidateSymbols)
 				{
-					symbols.Add((methodFromCandidateSymbol, false));
+					if (candidate is IMethodSymbol methodFromCandidateSymbol)
+					{
+						symbols.Add((methodFromCandidateSymbol, false));
+					}
 				}
 			}
-		}
-		else
-		{
-			symbols.Add((null, false));
-		}
+			else
+			{
+				symbols.Add((null, false));
+			}
 
-		return [.. symbols];
+			return [.. symbols];
+		}
 	}
 }

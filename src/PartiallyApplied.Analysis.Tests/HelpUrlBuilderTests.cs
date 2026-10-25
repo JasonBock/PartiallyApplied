@@ -2,7 +2,7 @@
 
 namespace PartiallyApplied.Tests;
 
-public static class HelpUrlBuilderTests
+internal static class HelpUrlBuilderTests
 {
 	[Test]
 	public static void Create() =>

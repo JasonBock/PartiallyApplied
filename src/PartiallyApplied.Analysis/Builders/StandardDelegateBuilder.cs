@@ -6,29 +6,17 @@ namespace PartiallyApplied.Builders;
 
 internal static class StandardDelegateBuilder
 {
-	internal static void Build(InvocationModel result,
-		IndentedTextWriter writer, NamespaceGatherer gatherer)
+	internal static void Build(InvocationModel result, IndentedTextWriter writer)
 	{
 		var target = result.Target;
-
-		// Need the namespace for typeof(Action)
-		gatherer.Add("System");
 
 		var delegateType = target.ReturnsVoid ? "Action" : "Func";
 
 		var targetDelegateParameters = new List<ITypeReferenceModel>(
-			target.Parameters.Select(parameter =>
-			{
-				if (parameter.Type.Namespace is not null)
-				{
-					gatherer.Add(parameter.Type.Namespace);
-				}
-				return parameter.Type;
-			}));
+			target.Parameters.Select(parameter => parameter.Type));
 
 		if (!target.ReturnsVoid)
 		{
-			gatherer.Add(target.ReturnType.Namespace);
 			targetDelegateParameters.Add(target.ReturnType);
 		}
 

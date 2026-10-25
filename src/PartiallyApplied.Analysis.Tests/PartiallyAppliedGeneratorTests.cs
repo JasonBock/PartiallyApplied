@@ -6,7 +6,7 @@ namespace PartiallyApplied.Tests;
 // I need to control the id value that is used to uniquely name the delegates.
 // Therefore, this class is not parallelizable.
 [NonParallelizable]
-public static class PartiallyAppliedGeneratorTests
+internal static class PartiallyAppliedGeneratorTests
 {
 	[SetUp]
 	public static void SetUp() => CustomDelegateBuilder.id = 0;

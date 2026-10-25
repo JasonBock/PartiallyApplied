@@ -73,7 +73,7 @@ internal sealed record AppliedInvocationModel
 
 		return canGenerate ?
 			new AppliedInvocationModel(
-				[.. results.Select(result => new InvocationModel(result.ApplyName, result.PartialArgumentCount, new MethodModel(result.Target)))], []) :
+				[.. results.Select(result => new InvocationModel(result.ApplyName, result.PartialArgumentCount, new MethodModel(result.Target, typeReferenceModelContext)))], []) :
 			new AppliedInvocationModel(
 				[], [.. diagnostics]);
 	}

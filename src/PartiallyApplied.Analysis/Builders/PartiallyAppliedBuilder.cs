@@ -1,7 +1,7 @@
 ﻿using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.Text;
+using PartiallyApplied.Analysis.Extensions;
 using PartiallyApplied.Analysis.Models;
-using PartiallyApplied.Extensions;
 using System.CodeDom.Compiler;
 using System.Collections.Immutable;
 using System.Text;
@@ -23,47 +23,32 @@ internal sealed class PartiallyAppliedBuilder
 		using var textWriter = new StringWriter();
 		using var writer = new IndentedTextWriter(textWriter, "\t");
 
-		var gatherer = new NamespaceGatherer();
-
-		writer.WriteLine($"public static partial class {Naming.PartiallyClassName}");
-		writer.WriteLine("{");
+		writer.WriteLines(
+			$$"""
+			public static partial class {{Naming.PartiallyClassName}}
+			{
+				#nullable enable
+			""");
+			
 		writer.Indent++;
 
 		foreach (var result in this.invocations)
 		{
 			if (result.Target.IsStandard)
 			{
-				StandardDelegateBuilder.Build(result, writer, gatherer);
+				StandardDelegateBuilder.Build(result, writer);
 			}
 			else
 			{
-				CustomDelegateBuilder.Build(result, writer, gatherer);
+				CustomDelegateBuilder.Build(result, writer);
 			}
 		}
 
 		writer.Indent--;
 		writer.WriteLine("}");
 
-#pragma warning disable RS1035 // Do not use APIs banned for analyzers
-		return string.Join(Environment.NewLine,
-			string.Join(Environment.NewLine, gatherer.Values.Select(_ => $"using {_};")), string.Empty, "#nullable enable", textWriter.ToString());
-#pragma warning restore RS1035 // Do not use APIs banned for analyzers
+		return textWriter.ToString();
 	}
 
 	public SourceText Code { get; private set; }
-
-	private sealed class IMethodSymbolEqualityComparer
-		: IEqualityComparer<IMethodSymbol>
-	{
-		private static readonly Lazy<IMethodSymbolEqualityComparer> defaultValue = new(() => new());
-
-		private IMethodSymbolEqualityComparer()
-			: base() { }
-
-		public bool Equals(IMethodSymbol x, IMethodSymbol y) => x.AreEqual(y);
-
-		public int GetHashCode(IMethodSymbol obj) => obj.GetHashCode();
-
-		public static IMethodSymbolEqualityComparer Default { get; } = IMethodSymbolEqualityComparer.defaultValue.Value;
-	}
 }

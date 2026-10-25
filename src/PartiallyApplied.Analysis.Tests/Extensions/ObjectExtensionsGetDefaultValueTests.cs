@@ -3,7 +3,7 @@ using PartiallyApplied.Extensions;
 
 namespace PartiallyApplied.Tests.Extensions;
 
-public static class ObjectExtensionsGetDefaultValueTests
+internal static class ObjectExtensionsGetDefaultValueTests
 {
 	[TestCase("b", 
 		"""

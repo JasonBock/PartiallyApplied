@@ -4,11 +4,14 @@ namespace PartiallyApplied.Extensions;
 
 internal static class ImmutableHashSetBuilderExtensions
 {
-	internal static void AddRange<T>(this ImmutableHashSet<T>.Builder self, IEnumerable<T> values)
+	extension<T>(ImmutableHashSet<T>.Builder self)
 	{
-		foreach (var value in values)
+		internal void AddRange(IEnumerable<T> values)
 		{
-			_ = self.Add(value);
+			foreach (var value in values)
+			{
+				_ = self.Add(value);
+			}
 		}
 	}
 }
