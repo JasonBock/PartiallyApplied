@@ -8,7 +8,6 @@ internal sealed record MethodModel
 	internal MethodModel(IMethodSymbol method, TypeReferenceModelContext typeReferenceModelContext)
 	{
 		this.IsStandard = method.IsStandard();
-		this.Name = method.Name;
 		this.Parameters = [.. method.Parameters.Select(_ => new ParameterModel(_, typeReferenceModelContext))];
 		this.ReturnsVoid = method.ReturnsVoid;
 		this.ReturnType = typeReferenceModelContext.CreateTypeReference(method.ReturnType);
@@ -18,7 +17,6 @@ internal sealed record MethodModel
 	}
 
 	internal bool IsStandard { get; }
-	internal string Name { get; }
 	internal EquatableArray<ParameterModel> Parameters { get; }
 	internal bool ReturnsByRef { get; }
 	internal bool ReturnsByRefReadonly { get; }

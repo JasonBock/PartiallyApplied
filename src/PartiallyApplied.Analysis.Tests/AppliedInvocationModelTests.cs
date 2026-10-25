@@ -145,7 +145,6 @@ internal static class AppliedInvocationModelTests
 			Assert.That(information.Diagnostics, Is.Empty);
 			Assert.That(information.Invocations, Is.Not.Empty);
 			var result = information.Invocations[0];
-			Assert.That(result.Target.Name, Is.EqualTo("Contains"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		}
 	}
@@ -310,7 +309,6 @@ internal static class AppliedInvocationModelTests
 			Assert.That(information.Diagnostics, Is.Empty);
 			Assert.That(information.Invocations, Is.Not.Empty);
 			var result = information.Invocations[0];
-			Assert.That(result.Target.Name, Is.EqualTo("Add"));
 			Assert.That(result.PartialArgumentCount, Is.EqualTo(1));
 		}
 	}

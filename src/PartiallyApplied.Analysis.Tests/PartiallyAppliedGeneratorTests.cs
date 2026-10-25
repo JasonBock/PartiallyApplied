@@ -293,8 +293,6 @@ internal static class PartiallyAppliedGeneratorTests
 			{
 				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int a) =>
 					new((b) => method(a, b));
-				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int a) =>
-					new((b) => method(a, b));
 			}
 			
 			""";
