@@ -12,39 +12,76 @@ internal static class PartiallyAppliedGeneratorTests
 	public static void SetUp() => CustomDelegateBuilder.id = 0;
 
 	[Test]
-	public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
+	public static async Task GenerateAsync()
 	{
 		var code =
-		"""
-		namespace PartiallyTests
-		{
-			public static class Maths
+			"""
+			namespace PartiallyTests
 			{
-				public static void Combine<T>(int a, T b) { } 
-			}
-
-			public static class Test
-			{
-				public static void Generate()
+				public static class Maths
 				{
-					var combineWith3 = Partially.Apply<int>(Maths.Combine, 3);
+					public static int Add(int a, int b) => a + b;
+				}
+
+				public static class Test
+				{
+					public static void Generate()
+					{
+						var incrementBy3 = Partially.Apply(Maths.Add, 3);
+					}
 				}
 			}
-		}
-		""";
+			""";
 
 		var generatedCode =
 			"""
-			using PartiallyTests;
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Action<T> Apply<T>(Action<int, T> method, int a) =>
+				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int a) =>
 					new((b) => method(a, b));
 			}
+			
+			""";
 
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
+	}
+
+	[Test]
+	public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
+	{
+		var code =
+			"""
+			namespace PartiallyTests
+			{
+				public static class Maths
+				{
+					public static void Combine<T>(int a, T b) { } 
+				}
+
+				public static class Test
+				{
+					public static void Generate()
+					{
+						var combineWith3 = Partially.Apply<int>(Maths.Combine, 3);
+					}
+				}
+			}
+			""";
+
+		var generatedCode =
+			"""
+			#nullable enable
+			
+			public static partial class Partially
+			{
+				public static global::System.Action<T> Apply<T>(global::System.Action<int, T> method, int a) =>
+					new((b) => method(a, b));
+			}
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -78,18 +115,16 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using PartiallyTests;
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public delegate void Target_1_Delegate<T>(int value, Span<int> buffer, T value2);
-				public delegate void Apply_1_Delegate<T>(Span<int> buffer, T value2);
+				public delegate void Target_1_Delegate<T>(int value, global::System.Span<int> buffer, T value2);
+				public delegate void Apply_1_Delegate<T>(global::System.Span<int> buffer, T value2);
 				public static Apply_1_Delegate<T> Apply<T>(Target_1_Delegate<T> method, int value) =>
 					new((buffer, value2) => method(value, buffer, value2));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -127,9 +162,8 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
 				public delegate ref int Target_1_Delegate(int a, int b);
@@ -137,7 +171,7 @@ internal static class PartiallyAppliedGeneratorTests
 				public static Apply_1_Delegate ApplyWithRefReturn(Target_1_Delegate method, int a) =>
 					new((b) => ref method(a, b));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -175,9 +209,8 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
 				public delegate ref readonly int Target_1_Delegate(int a, int b);
@@ -185,47 +218,7 @@ internal static class PartiallyAppliedGeneratorTests
 				public static Apply_1_Delegate ApplyWithRefReadonlyReturn(Target_1_Delegate method, int a) =>
 					new((b) => ref method(a, b));
 			}
-
-			""";
-
-		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
-			[(Shared.GeneratedFileName, generatedCode)],
-			[]);
-	}
-
-	[Test]
-	public static async Task GenerateWhenInvocationDoesNotExistAsync()
-	{
-		var code =
-			"""
-			namespace PartiallyTests
-			{
-				public static class Maths
-				{
-					public static int Add(int a, int b) => a + b;
-				}
-
-				public static class Test
-				{
-					public static void Generate()
-					{
-						var incrementBy3 = Partially.Apply(Maths.Add, 3);
-					}
-				}
-			}
-			""";
-
-		var generatedCode =
-			"""
-			using System;
-
-			#nullable enable
-			public static partial class Partially
-			{
-				public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
-					new((b) => method(a, b));
-			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -294,15 +287,16 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Func<int, int> Apply(Func<int, int, int> method, int a) =>
+				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int a) =>
+					new((b) => method(a, b));
+				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int a) =>
 					new((b) => method(a, b));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -337,17 +331,16 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Action<int, int, Guid> Apply(Action<Guid, int, int, Guid> method, Guid a) =>
+				public static global::System.Action<int, int, global::System.Guid> Apply(global::System.Action<global::System.Guid, int, int, global::System.Guid> method, global::System.Guid a) =>
 					new((b, c, d) => method(a, b, c, d));
-				public static Action<string, Guid> Apply(Action<int, string, Guid> method, int a) =>
+				public static global::System.Action<string, global::System.Guid> Apply(global::System.Action<int, string, global::System.Guid> method, int a) =>
 					new((b, c) => method(a, b, c));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -375,15 +368,14 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Func<int, int> Apply(Func<int, int, int> method, int arg1) =>
+				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int arg1) =>
 					new((arg2) => method(arg1, arg2));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -418,15 +410,14 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Func<int, int> Apply(Func<int, int, int> method, int arg1) =>
+				public static global::System.Func<int, int> Apply(global::System.Func<int, int, int> method, int arg1) =>
 					new((arg2) => method(arg1, arg2));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
@@ -461,15 +452,14 @@ internal static class PartiallyAppliedGeneratorTests
 
 		var generatedCode =
 			"""
-			using System;
-
 			#nullable enable
+			
 			public static partial class Partially
 			{
-				public static Action<int> Apply(Action<int, int> method, int arg1) =>
+				public static global::System.Action<int> Apply(global::System.Action<int, int> method, int arg1) =>
 					new((arg2) => method(arg1, arg2));
 			}
-
+			
 			""";
 
 		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,

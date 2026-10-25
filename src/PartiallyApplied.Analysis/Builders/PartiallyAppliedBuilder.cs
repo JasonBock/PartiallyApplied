@@ -25,9 +25,10 @@ internal sealed class PartiallyAppliedBuilder
 
 		writer.WriteLines(
 			$$"""
+			#nullable enable
+			
 			public static partial class {{Naming.PartiallyClassName}}
 			{
-				#nullable enable
 			""");
 			
 		writer.Indent++;

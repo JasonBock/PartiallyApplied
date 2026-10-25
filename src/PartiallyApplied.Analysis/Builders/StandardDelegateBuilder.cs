@@ -10,7 +10,7 @@ internal static class StandardDelegateBuilder
 	{
 		var target = result.Target;
 
-		var delegateType = target.ReturnsVoid ? "Action" : "Func";
+		var delegateType = target.ReturnsVoid ? "global::System.Action" : "global::System.Func";
 
 		var targetDelegateParameters = new List<ITypeReferenceModel>(
 			target.Parameters.Select(parameter => parameter.Type));
