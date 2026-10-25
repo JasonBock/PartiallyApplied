@@ -333,10 +333,10 @@ internal static class PartiallyAppliedGeneratorTests
 			
 			public static partial class Partially
 			{
-				public static global::System.Action<int, int, global::System.Guid> Apply(global::System.Action<global::System.Guid, int, int, global::System.Guid> method, global::System.Guid a) =>
-					new((b, c, d) => method(a, b, c, d));
 				public static global::System.Action<string, global::System.Guid> Apply(global::System.Action<int, string, global::System.Guid> method, int a) =>
 					new((b, c) => method(a, b, c));
+				public static global::System.Action<int, int, global::System.Guid> Apply(global::System.Action<global::System.Guid, int, int, global::System.Guid> method, global::System.Guid a) =>
+					new((b, c, d) => method(a, b, c, d));
 			}
 			
 			""";

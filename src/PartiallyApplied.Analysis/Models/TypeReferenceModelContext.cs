@@ -43,7 +43,8 @@ internal sealed class TypeReferenceModelContext
 			this.SymbolKind = type.Kind;
 		}
 
-		public override string ToString() => this.FullyQualifiedName;
+		public int CompareTo(ITypeReferenceModel other) =>
+			this.FullyQualifiedName.CompareTo(other.FullyQualifiedName);
 
 		public bool Equals(ITypeReferenceModel other) =>
 			this.Equals(other as TypeReferenceModel);
@@ -52,6 +53,8 @@ internal sealed class TypeReferenceModelContext
 			this.FullyQualifiedName == other?.FullyQualifiedName;
 
 		public override int GetHashCode() => this.FullyQualifiedName.GetHashCode();
+
+		public override string ToString() => this.FullyQualifiedName;
 
 		public string FullyQualifiedName { get; }
 		public string Name { get; }

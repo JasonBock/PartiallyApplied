@@ -4,6 +4,7 @@ using PartiallyApplied.Extensions;
 namespace PartiallyApplied.Analysis.Models;
 
 internal sealed record MethodModel
+	: IComparable<MethodModel>
 {
 	internal MethodModel(IMethodSymbol method, TypeReferenceModelContext typeReferenceModelContext)
 	{
@@ -23,4 +24,92 @@ internal sealed record MethodModel
 	internal bool ReturnsVoid { get; }
 	internal ITypeReferenceModel ReturnType { get; }
 	internal EquatableArray<ITypeReferenceModel> TypeParameters { get; }
+
+	public int CompareTo(MethodModel other)
+	{
+		var compareTo = this.IsStandard.CompareTo(other.IsStandard);
+
+		if (compareTo != 0)
+		{
+			return compareTo;
+		}
+		else
+		{
+			compareTo = this.ReturnsByRef.CompareTo(other.ReturnsByRef);
+
+			if (compareTo != 0)
+			{
+				return compareTo;
+			}
+			else
+			{
+				compareTo = this.ReturnsByRefReadonly.CompareTo(other.ReturnsByRefReadonly);
+
+				if (compareTo != 0)
+				{
+					return compareTo;
+				}
+				else
+				{
+					compareTo = this.ReturnsVoid.CompareTo(other.ReturnsVoid);
+
+					if (compareTo != 0)
+					{
+						return compareTo;
+					}
+					else
+					{
+						compareTo = this.Parameters.Length.CompareTo(other.Parameters.Length);
+
+						if (compareTo != 0)
+						{
+							return compareTo;
+						}
+						else
+						{
+							for (var i = 0; i < this.Parameters.Length; i++)
+							{
+								compareTo = this.Parameters[i].CompareTo(other.Parameters[i]);
+
+								if (compareTo != 0)
+								{
+									return compareTo;
+								}
+							}
+
+							compareTo = this.ReturnType.CompareTo(other.ReturnType);
+
+							if (compareTo != 0)
+							{
+								return compareTo;
+							}
+							else
+							{
+								compareTo = this.TypeParameters.Length.CompareTo(other.TypeParameters.Length);
+
+								if (compareTo != 0)
+								{
+									return compareTo;
+								}
+								else
+								{
+									for (var i = 0; i < this.TypeParameters.Length; i++)
+									{
+										compareTo = this.TypeParameters[i].CompareTo(other.TypeParameters[i]);
+
+										if (compareTo != 0)
+										{
+											return compareTo;
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+
+		return 0;
+	}
 }

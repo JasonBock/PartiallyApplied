@@ -36,15 +36,14 @@ public sealed class PartiallyAppliedGenerator
 		var output = context.CompilationProvider.Combine(provider.Collect());
 
 		context.RegisterSourceOutput(output,
-			(context, source) => CreateOutput(source.Left, source.Right, context));
+			(context, source) => CreateOutput(source.Right, context));
 	}
 
-	private static void CreateOutput(Compilation compilation,
-		ImmutableArray<AppliedInvocationModel> targets, SourceProductionContext context)
+	private static void CreateOutput(ImmutableArray<AppliedInvocationModel> targets, SourceProductionContext context)
 	{
 		if (targets.Length > 0)
 		{
-			var invocations = new HashSet<InvocationModel>();
+			var invocations = new SortedSet<InvocationModel>(new InvocationModelComparer());
 
 			foreach (var target in targets.Distinct())
 			{
@@ -68,6 +67,29 @@ public sealed class PartiallyAppliedGenerator
 			{
 				var builder = new PartiallyAppliedBuilder([.. invocations]);
 				context.AddSource(Shared.GeneratedFileName, builder.Code);
+			}
+		}
+	}
+
+	private sealed class InvocationModelComparer
+		: IComparer<InvocationModel>
+	{
+		public int Compare(InvocationModel x, InvocationModel y)
+		{
+			var compareTo = x.ApplyName.CompareTo(y.ApplyName);
+
+			if (compareTo != 0)
+			{
+				return compareTo;
+			}
+			else
+			{
+				compareTo = x.PartialArgumentCount.CompareTo(y.PartialArgumentCount);
+
+				return 
+					compareTo != 0 ? 
+						compareTo : 
+						x.Target.CompareTo(y.Target);
 			}
 		}
 	}
