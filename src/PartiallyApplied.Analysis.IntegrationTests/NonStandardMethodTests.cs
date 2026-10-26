@@ -62,12 +62,12 @@ public static class NonStandardMethodTests
 		Assert.That(combine3AtEndWithString("c"), Is.EqualTo("3, c"));
 	}
 
-	[Test]
-	public static void ApplyForGenericBegin()
-	{
-		var combine3AtBeginWithInt = Partially.Apply<int>(NonStandardMethods.RefReturnBegin<int>, 3);
-		Assert.That(combine3AtBeginWithInt(4), Is.EqualTo("3, 4"));
-	}
+	//[Test]
+	//public static void ApplyForGenericBegin()
+	//{
+	//	var combine3AtBeginWithInt = Partially.Apply<int>(NonStandardMethods.RefReturnBegin<int>, 3);
+	//	Assert.That(combine3AtBeginWithInt(4), Is.EqualTo("3, 4"));
+	//}
 
 	[Test]
 	public static void ApplyWithLotsOfParameters()

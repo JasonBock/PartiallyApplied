@@ -1,5 +1,4 @@
-﻿using Microsoft.CodeAnalysis;
-using Microsoft.CodeAnalysis.Text;
+﻿using Microsoft.CodeAnalysis.Text;
 using PartiallyApplied.Analysis.Extensions;
 using PartiallyApplied.Analysis.Models;
 using System.CodeDom.Compiler;
@@ -10,9 +9,9 @@ namespace PartiallyApplied.Builders;
 
 internal sealed class PartiallyAppliedBuilder
 {
-	private readonly ImmutableHashSet<InvocationModel> invocations;
+	private readonly ImmutableArray<InvocationModel> invocations;
 
-	internal PartiallyAppliedBuilder(ImmutableHashSet<InvocationModel> invocations)
+	internal PartiallyAppliedBuilder(ImmutableArray<InvocationModel> invocations)
 	{
 		this.invocations = invocations;
 		this.Code = SourceText.From(this.Build(), Encoding.UTF8);

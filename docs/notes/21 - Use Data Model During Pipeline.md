@@ -7,14 +7,13 @@ An `InvocationModel` has three things:
 
 TODO:
 
-* `PartiallyAppliedGeneratorTests`
+* DONE - `PartiallyAppliedGeneratorTests`
     * DONE - `GenerateWhenDuplicatesExistAsync` - should only generate 1, not 2
     * DONE - `GenerateWhenOverloadsExistAsync` - the order of the generated `Apply` methods keeps switching, need to make it consistent
         * DONE - Comparables
             * DONE - `MethodModel` 
             * DONE - `ParameterModel`
             * DONE - `TypeReferenceModel`
-    * Create a test with referencing a type with a namespace
 * DONE (deleted) - `NamespaceGatherer` - is this needed? Why?
 * DONE (deleted) - `IMethodSymbolEqualityComparer` - may be able to delete
 * `ExpressionSyntaxExtensions.TryGetMethodSymbols()` - do I actually have a case where there will be more than 1 candidate symbol? Update tests as well to verify count.

@@ -51,6 +51,52 @@ internal static class PartiallyAppliedGeneratorTests
 	}
 
 	[Test]
+	public static async Task GenerateWithParameterTypeInNamespaceAsync()
+	{
+		var code =
+			"""
+			using System;
+
+			namespace SomeNamespace
+			{
+				public sealed record Identity(Guid Id);
+			}
+
+			namespace PartiallyTests
+			{
+				public static class Worker
+				{
+					public static void Work(int a, SomeNamespace.Identity identity) { }
+				}
+
+				public static class Test
+				{
+					public static void Generate()
+					{
+						var workWith3 = Partially.Apply(Worker.Work, 3);
+					}
+				}
+			}
+			""";
+
+		var generatedCode =
+			"""
+			#nullable enable
+			
+			public static partial class Partially
+			{
+				public static global::System.Action<global::SomeNamespace.Identity> Apply(global::System.Action<int, global::SomeNamespace.Identity> method, int a) =>
+					new((identity) => method(a, identity));
+			}
+			
+			""";
+
+		await TestAssistants.RunGeneratorAsync<PartiallyAppliedGenerator>(code,
+			[(Shared.GeneratedFileName, generatedCode)],
+			[]);
+	}
+
+	[Test]
 	public static async Task GenerateWhenGenericsExistForStandardMethodAsync()
 	{
 		var code =
