@@ -7,13 +7,9 @@ namespace PartiallyApplied.Builders;
 
 internal static class CustomDelegateBuilder
 {
-	internal static int id;
-
 	internal static void Build(InvocationModel result, IndentedTextWriter writer)
 	{
 		var target = result.Target;
-
-		var id = Interlocked.Increment(ref CustomDelegateBuilder.id);
 
 		var applyParameters = string.Join(", ", target.Parameters.Take(result.PartialArgumentCount)
 			.Select(parameter => $"{parameter.Type.FullyQualifiedName} {parameter.Name}"));
@@ -27,7 +23,7 @@ internal static class CustomDelegateBuilder
 					$"{parameter.Type.FullyQualifiedName} {parameter.Name} = {parameter.ExplicitDefaultValue.GetDefaultValue()}" : 
 					$"{parameter.Type.FullyQualifiedName} {parameter.Name}"));
 		// NOTE: The number of open generics for the target delegate is the same as the apply method.
-		var targetDelegateName = $"Target_{id}_Delegate{applyOpenGenerics}";
+		var targetDelegateName = $"Target_{target.Hash}_Delegate{applyOpenGenerics}";
 
 		var applyDelegateParameters = string.Join(", ", target.Parameters.Skip(result.PartialArgumentCount)
 			.Select(_ => _.HasExplicitDefaultValue ? 
@@ -37,7 +33,7 @@ internal static class CustomDelegateBuilder
 			.Where(_ => _.Type.SymbolKind == SymbolKind.TypeParameter).ToArray();
 		var applyDelegateOpenGenerics = applyDelegateGenerics.Length > 0 ?
 			$"<{string.Join(", ", applyDelegateGenerics.Select(_ => _.Type.FullyQualifiedName))}>" : string.Empty;
-		var applyDelegateName = $"Apply_{id}_Delegate{applyDelegateOpenGenerics}";
+		var applyDelegateName = $"Apply_{target.Hash}_Delegate{applyDelegateOpenGenerics}";
 
 		var refReturn = 
 			target.ReturnsByRef ? 

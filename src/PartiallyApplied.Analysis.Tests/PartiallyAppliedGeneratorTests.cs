@@ -1,16 +1,9 @@
 ﻿using NUnit.Framework;
-using PartiallyApplied.Builders;
 
 namespace PartiallyApplied.Tests;
 
-// I need to control the id value that is used to uniquely name the delegates.
-// Therefore, this class is not parallelizable.
-[NonParallelizable]
 internal static class PartiallyAppliedGeneratorTests
 {
-	[SetUp]
-	public static void SetUp() => CustomDelegateBuilder.id = 0;
-
 	[Test]
 	public static async Task GenerateAsync()
 	{
@@ -165,9 +158,9 @@ internal static class PartiallyAppliedGeneratorTests
 			
 			public static partial class Partially
 			{
-				public delegate void Target_1_Delegate<T>(int value, global::System.Span<int> buffer, T value2);
-				public delegate void Apply_1_Delegate<T>(global::System.Span<int> buffer, T value2);
-				public static Apply_1_Delegate<T> Apply<T>(Target_1_Delegate<T> method, int value) =>
+				public delegate void Target_D6F274AC_Delegate<T>(int value, global::System.Span<int> buffer, T value2);
+				public delegate void Apply_D6F274AC_Delegate<T>(global::System.Span<int> buffer, T value2);
+				public static Apply_D6F274AC_Delegate<T> Apply<T>(Target_D6F274AC_Delegate<T> method, int value) =>
 					new((buffer, value2) => method(value, buffer, value2));
 			}
 			
@@ -212,9 +205,9 @@ internal static class PartiallyAppliedGeneratorTests
 			
 			public static partial class Partially
 			{
-				public delegate ref int Target_1_Delegate(int a, int b);
-				public delegate ref int Apply_1_Delegate(int b);
-				public static Apply_1_Delegate ApplyWithRefReturn(Target_1_Delegate method, int a) =>
+				public delegate ref int Target_6B76E192_Delegate(int a, int b);
+				public delegate ref int Apply_6B76E192_Delegate(int b);
+				public static Apply_6B76E192_Delegate ApplyWithRefReturn(Target_6B76E192_Delegate method, int a) =>
 					new((b) => ref method(a, b));
 			}
 			
@@ -259,9 +252,9 @@ internal static class PartiallyAppliedGeneratorTests
 			
 			public static partial class Partially
 			{
-				public delegate ref readonly int Target_1_Delegate(int a, int b);
-				public delegate ref readonly int Apply_1_Delegate(int b);
-				public static Apply_1_Delegate ApplyWithRefReadonlyReturn(Target_1_Delegate method, int a) =>
+				public delegate ref readonly int Target_11D24770_Delegate(int a, int b);
+				public delegate ref readonly int Apply_11D24770_Delegate(int b);
+				public static Apply_11D24770_Delegate ApplyWithRefReadonlyReturn(Target_11D24770_Delegate method, int a) =>
 					new((b) => ref method(a, b));
 			}
 			

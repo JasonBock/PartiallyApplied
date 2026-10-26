@@ -10,6 +10,7 @@ internal sealed record ParameterModel
 		this.Type = typeReferenceModelContext.CreateTypeReference(parameterSymbol.Type);
 		this.Name = parameterSymbol.Name;
 		this.HasExplicitDefaultValue = parameterSymbol.HasExplicitDefaultValue;
+		this.RefKind = parameterSymbol.RefKind;
 
 		if (parameterSymbol.HasExplicitDefaultValue)
 		{
@@ -23,5 +24,6 @@ internal sealed record ParameterModel
 	internal object? ExplicitDefaultValue { get; }
 	internal bool HasExplicitDefaultValue { get; }
 	internal string Name { get; }
+	internal RefKind RefKind { get; }
 	internal ITypeReferenceModel Type { get; }
 }
