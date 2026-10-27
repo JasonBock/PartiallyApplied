@@ -14,6 +14,8 @@ TODO:
             * DONE - `MethodModel` 
             * DONE - `ParameterModel`
             * DONE - `TypeReferenceModel`
+* Integration tests
+    * `StandardMethodTests.ApplyForGenericBegin()` and `NonStandardMethodTests.ApplyForGenericBegin()` - remove them for now.
 * DONE (deleted) - `NamespaceGatherer` - is this needed? Why?
 * DONE (deleted) - `IMethodSymbolEqualityComparer` - may be able to delete
 * `ExpressionSyntaxExtensions.TryGetMethodSymbols()` - do I actually have a case where there will be more than 1 candidate symbol? Update tests as well to verify count.

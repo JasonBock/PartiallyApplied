@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Updated to .NET 10 with various modernizations (issue [#23](https://github.com/JasonBock/PartiallyApplied/issues/23))
 - Underlying source generation uses immutable data models (issue [#21](https://github.com/JasonBock/PartiallyApplied/issues/21))
+- ID values generated for custom delegates is now consistent across compilations (issue [#20](https://github.com/JasonBock/PartiallyApplied/issues/20))
 
 ## [1.3.0] - 2023.02.05
 

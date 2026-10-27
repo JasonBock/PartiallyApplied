@@ -1,0 +1,3 @@
+Actually, `Func<>` and `Action<>` I think have been updated in recent .NET version to have an anti-constraint to allow `ref struct` types, like `Span<>`. So, for the test `GenerateWhenGenericsExistForNonStandardMethodAsync()`, I think we can actually now use the "standard" delegates.
+
+I also wonder if, because I'm looking for `Partially.Apply`, that if someone did `Partially.ApplyThisThing(...)`, that resulting effect would be that someone could resolve ambiguities just by appending to the "Apply" string.
